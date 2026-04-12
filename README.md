@@ -1,58 +1,445 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Auth service proyect
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🧠 Auth Core Platform (Multi-tenant SaaS Identity & Licensing)
 
-## About Laravel
+## 📌 Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sistema centralizado de autenticación, organizaciones (tenants), acceso a proyectos y licenciamiento, diseñado para reutilizarse en múltiples aplicaciones SaaS.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Objetivos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Evitar duplicación de usuarios entre apps
+- Centralizar autenticación y autorización
+- Soportar multitenancy (organizaciones con equipos)
+- Gestionar licencias por organización
+- Acelerar desarrollo de nuevos SaaS
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# 🧱 Arquitectura
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧩 Estilo
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- Monolito modular
+- Clean Architecture (capas desacopladas)
 
-## Agentic Development
+## 📂 Estructura
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+(Sin definir)
 
-```bash
-composer require laravel/boost --dev
+---
 
-php artisan boost:install
+# 🏢 Modelo de dominio
+
+## Entidades principales
+
+- User (global)
+- Organization (tenant)
+- Project
+- License
+- Invitation
+- AuditLog
+
+---
+
+# 🗄️ Base de Datos
+
+## users
+
+```sql
+id
+email (unique)
+password
+global_role (root | user)
+created_at
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## organizations
 
-## Contributing
+```jsx
+id
+name
+owner_user_id
+created_at
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## organization_users
 
-## Code of Conduct
+```jsx
+id
+organization_id
+user_id
+role (admin | member)
+created_at
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## projects
 
-## Security Vulnerabilities
+```jsx
+id
+name
+slug (unique)
+created_at
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## organization_projects
 
-## License
+```jsx
+id
+organization_id
+project_id
+enabled (bool)
+created_at
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## licenses
+
+```jsx
+id
+organization_id
+type (global | project)
+project_id (nullable)
+plan (free | pro)
+status (active | expired)
+expires_at
+```
+
+## invitations
+
+```jsx
+id
+organization_id
+email
+role (admin | member)
+token
+expires_at
+accepted_at
+```
+
+## **audit_logs**
+
+```jsx
+id
+user_id
+organization_id
+action
+entity_type
+entity_id
+metadata (json)
+created_at
+```
+
+# 🔐 Autenticación
+
+## JWT Strategy
+
+### Access Token
+
+- corto (15–30 min)
+
+### Refresh Token
+
+- largo (7–30 días)
+- almacenado en DB
+
+---
+
+## Payload JWT
+
+```
+{
+  "sub":"user_id",
+  "org_id":"org_id",
+  "role":"admin",
+  "iat":1710000000,
+  "exp":1710003600
+}
+```
+
+---
+
+## Refresh Tokens (tabla sugerida)
+
+```
+refresh_tokens
+- id
+- user_id
+- token (hash)
+- expires_at
+- revoked (bool)
+```
+
+---
+
+# 🔄 Flujo de autenticación
+
+## Registro
+
+1. Usuario envía email/password + project_id
+2. Backend:
+    - busca user por email
+    - si no existe → crea
+3. crea organization (si es nuevo)
+4. vincula project a organization
+5. asigna rol admin
+
+---
+
+## Login
+
+1. valida credenciales
+2. devuelve:
+    - access_token
+    - refresh_token
+
+---
+
+## Refresh
+
+1. valida refresh_token
+2. genera nuevo access_token
+
+---
+
+# 🧩 Endpoints
+
+## Auth
+
+### POST /auth/register
+
+```
+{
+  "email":"",
+  "password":"",
+  "project_id":""
+}
+```
+
+---
+
+### POST /auth/login
+
+```
+{
+  "email":"",
+  "password":""
+}
+```
+
+---
+
+### POST /auth/refresh
+
+```
+{
+  "refresh_token":""
+}
+```
+
+---
+
+### POST /auth/logout
+
+- revoca refresh token
+
+---
+
+## Organizations
+
+### GET /organizations
+
+- lista organizaciones del usuario
+
+### POST /organizations
+
+- crear nueva org
+
+---
+
+## Organization Users
+
+### GET /organizations/{id}/users
+
+### POST /organizations/{id}/invite
+
+```
+{
+  "email":"",
+  "role":"member"
+}
+```
+
+---
+
+### POST /invitations/accept
+
+```
+{
+  "token":"",
+  "password":""
+}
+```
+
+---
+
+## Projects
+
+### GET /projects
+
+### POST /organizations/{id}/projects/enable
+
+```
+{
+  "project_id":""
+}
+```
+
+---
+
+## Licenses
+
+### GET /organizations/{id}/license
+
+### POST /organizations/{id}/license
+
+```
+{
+  "plan":"pro"
+}
+```
+
+---
+
+# 🛡️ Middlewares
+
+## 1. AuthMiddleware
+
+- valida JWT
+
+---
+
+## 2. OrganizationMiddleware
+
+- valida que user pertenece a org
+
+---
+
+## 3. ProjectAccessMiddleware
+
+- valida:
+    - org tiene project habilitado
+    - licencia activa
+
+Headers requeridos:
+
+```
+Authorization: Bearer xxx
+X-Org-ID: org_id
+X-Project-ID: project_id
+```
+
+---
+
+## 4. RoleMiddleware
+
+- valida roles:
+    - admin
+    - member
+
+---
+
+## 5. LicenseMiddleware
+
+- valida plan activo
+
+---
+
+# 📩 Sistema de invitaciones
+
+## Flujo
+
+1. Admin invita usuario
+2. se genera token único
+3. se envía email
+4. usuario acepta:
+    - crea cuenta o vincula existente
+    - se agrega a organization
+
+---
+
+# 📜 Logs (Audit System)
+
+Registrar:
+
+- login
+- registro
+- creación de org
+- invitaciones
+- cambios de rol
+- cambios de licencia
+
+---
+
+# 💳 Licencias
+
+## MVP
+
+Planes:
+
+- free → acceso limitado
+- pro → acceso a todos los proyectos
+
+---
+
+## Reglas
+
+- licencia por organización
+- validar en cada request crítica
+
+---
+
+# 🧠 SDK (futuro)
+
+Funciones:
+
+```
+auth.login()
+auth.logout()
+auth.getUser()
+auth.getOrganizations()
+auth.hasAccess(projectId)
+```
+
+---
+
+# 🚀 Roadmap
+
+## Fase 1
+
+- auth básico
+- organizations
+
+## Fase 2
+
+- projects + acceso
+
+## Fase 3
+
+- licencias
+
+## Fase 4
+
+- invitaciones
+
+## Fase 5
+
+- logs + SDK
+
+---
+
+# ⚠️ Consideraciones clave
+
+- no sobrecargar JWT
+- mantener lógica de permisos en backend
+- separar identidad de acceso
+- diseñar todo pensando en organización como unidad principal
