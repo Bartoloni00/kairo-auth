@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->text('name');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
         });
     }
 
