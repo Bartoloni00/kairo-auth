@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->text('name');
             $table->string('type');
+            $table->enum('symbol', ['$', 'US$']);
+            $table->enum('currency', ['ARS', 'USD']);
             $table->decimal('price', 10, 2);
             $table->timestamps();
         });
