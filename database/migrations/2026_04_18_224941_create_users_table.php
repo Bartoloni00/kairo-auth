@@ -15,11 +15,10 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->string('email')->nullable()->unique();
             $table->string('password')->nullable();
-            $table->boolean('is_root')->nullable()->default(false);
+            $table->boolean('is_root')->default(false);
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

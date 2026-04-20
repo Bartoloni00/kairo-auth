@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('cascade');
             $table->string('name')->unique();
-            $table->boolean('is_sistem')->default(false);
+            $table->boolean('is_system')->default(false);
+            $table->string('slug')->nullable()->unique();
+            $table->text('description')->nullable();
+            $table->timestamps();
         });
     }
 
