@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder
     ]);
 
     Role::create([
-      'project_id' => 1,
+      'project_id' => null,
       'name' => 'Admin',
       'slug' => 'admin',
       'description' => 'Cliente administrador',

@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
             ProjectsSeeder::class,
             RoleSeeder::class,
             OrganizationSeeder::class,
+            UserSeeder::class,
+            ProjectUserAccessSeeder::class,
         ]);
     }
 }

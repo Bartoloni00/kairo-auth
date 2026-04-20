@@ -5,7 +5,6 @@ namespace App\Modules\Auth\Application\UseCases;
 use App\Modules\Users\Domain\Entities\User;
 use App\Modules\Users\Application\Ports\UserRepositoryInterface;
 use App\Modules\Auth\Application\Ports\ProjectUserRepositoryInterface;
-use Illuminate\Support\Facades\Hash;
 
 class RegisterUserUseCase
 {

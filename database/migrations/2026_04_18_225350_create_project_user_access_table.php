@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('project_user_access', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
-            $table->foreignId('organization_id')->constrained('organizations')->onDelete('cascade');
+            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('cascade');
+            $table->foreignId('organization_id')->nullable()->constrained('organizations')->onDelete('cascade');
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
         });
     }
