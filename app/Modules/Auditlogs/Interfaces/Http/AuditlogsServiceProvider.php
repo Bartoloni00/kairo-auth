@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Auditlogs\Interface\Http;
+namespace App\Modules\Auditlogs\Interfaces\Http;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;

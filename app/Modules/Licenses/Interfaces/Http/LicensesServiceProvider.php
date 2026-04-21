@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Invitations\Interface\Http;
+namespace App\Modules\Licenses\Interfaces\Http;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
-class InvitationsServiceProvider extends ServiceProvider implements DeferrableProvider
+class LicensesServiceProvider extends ServiceProvider implements DeferrableProvider
 {
   public function register(): void {}
 

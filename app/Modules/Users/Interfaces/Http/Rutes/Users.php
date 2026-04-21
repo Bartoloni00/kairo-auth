@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Users\Interface\Http\Rutes;
+namespace App\Modules\Users\Interfaces\Http\Rutes;
 
 use Illuminate\Support\Facades\Route;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Organizations\Interface\Http;
+namespace App\Modules\Organizations\Interfaces\Http;
 
 use Illuminate\Support\ServiceProvider;
 

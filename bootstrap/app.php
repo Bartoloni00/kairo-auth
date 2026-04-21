@@ -7,13 +7,13 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         api: [
-            __DIR__ . '/../app/Modules/Auth/Interface/Http/Rutes/Auth.php',
-            __DIR__ . '/../app/Modules/Users/Interface/Http/Rutes/Users.php',
-            __DIR__ . '/../app/Modules/Organizations/Interface/Http/Rutes/Organizations.php',
-            __DIR__ . '/../app/Modules/Projects/Interface/Http/Rutes/Projects.php',
-            __DIR__ . '/../app/Modules/Licenses/Interface/Http/Rutes/Licenses.php',
-            __DIR__ . '/../app/Modules/Invitations/Interface/Http/Rutes/Invitations.php',
-            __DIR__ . '/../app/Modules/Auditlogs/Interface/Http/Rutes/Auditlogs.php',
+            __DIR__ . '/../app/Modules/Auth/Interfaces/Http/Rutes/Auth.php',
+            __DIR__ . '/../app/Modules/Users/Interfaces/Http/Rutes/Users.php',
+            __DIR__ . '/../app/Modules/Organizations/Interfaces/Http/Rutes/Organizations.php',
+            __DIR__ . '/../app/Modules/Projects/Interfaces/Http/Rutes/Projects.php',
+            __DIR__ . '/../app/Modules/Licenses/Interfaces/Http/Rutes/Licenses.php',
+            __DIR__ . '/../app/Modules/Invitations/Interfaces/Http/Rutes/Invitations.php',
+            __DIR__ . '/../app/Modules/Auditlogs/Interfaces/Http/Rutes/Auditlogs.php',
         ],
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',

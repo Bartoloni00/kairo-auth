@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Projects\Interface\Http;
+namespace App\Modules\Projects\Interfaces\Http;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;

@@ -48,4 +48,29 @@ class RegisterUserRequest extends FormRequest
       'organization_id' => 'organización',
     ];
   }
+
+  public function getEmail(): string
+  {
+    return $this->email;
+  }
+
+  public function getPassword(): string
+  {
+    return $this->password;
+  }
+
+  public function getProjectId(): int
+  {
+    return $this->project_id;
+  }
+
+  public function getRoleId(): int
+  {
+    return $this->role_id;
+  }
+
+  public function getOrganizationId(): int
+  {
+    return $this->organization_id;
+  }
 }

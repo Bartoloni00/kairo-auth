@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Users\Interface\Http;
+namespace App\Modules\Users\Interfaces\Http;
 
 use Illuminate\Support\ServiceProvider;
 use App\Modules\Users\Application\Ports\UserRepositoryInterface;
