@@ -7,6 +7,7 @@ use App\Modules\Auth\Application\UseCases\{
   LoginUserUseCase,
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use App\Modules\Auth\Application\Requests\{
   RegisterUserRequest,
   LoginRequest
@@ -38,6 +39,18 @@ class AuthController
     return response()->json([
       'access_token' => $token,
       'token_type' => 'bearer',
+    ], 200);
+  }
+
+  public function me(Request $request): JsonResponse
+  {
+    $user = $request->attributes->get('user');
+
+    return response()->json([
+      'user' => [
+        'id' => $user->id,
+        'email' => $user->email,
+      ]
     ], 200);
   }
 }
