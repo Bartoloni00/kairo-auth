@@ -5,9 +5,7 @@ namespace App\Modules\Projects\Interfaces\Http;
 use Illuminate\Support\ServiceProvider;
 use App\Modules\Projects\Application\Ports\ProjectRepositoryInterface;
 use App\Modules\Projects\Infraestructure\Adapters\ProjectRepository;
-use Illuminate\Contracts\Support\DeferrableProvider;
-
-class ProjectsServiceProvider extends ServiceProvider implements DeferrableProvider
+class ProjectsServiceProvider extends ServiceProvider
 {
   /**
    * Register any application services.

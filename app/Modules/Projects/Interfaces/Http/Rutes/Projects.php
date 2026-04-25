@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Projects\Interfaces\Http\Controllers\ProjectController;
 
-Route::prefix('projects')->group(function () {
+Route::prefix('projects')->middleware('jwt')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
     Route::post('/', [ProjectController::class, 'store']);
     Route::get('/{id}', [ProjectController::class, 'show']);

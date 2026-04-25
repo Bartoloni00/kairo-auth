@@ -13,16 +13,10 @@ class Organization extends Model
 
   protected $fillable = [
     'name',
-    'slug',
-    'description',
-    'is_system',
   ];
 
   protected $casts = [
     'name' => 'string',
-    'slug' => 'string',
-    'description' => 'string',
-    'is_system' => 'boolean',
     'created_at' => 'datetime',
     'updated_at' => 'datetime',
   ];

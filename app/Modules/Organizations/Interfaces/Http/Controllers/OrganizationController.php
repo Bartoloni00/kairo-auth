@@ -41,8 +41,6 @@ class OrganizationController
   {
     $data = $request->validate([
       'name' => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'is_system' => 'boolean',
     ]);
 
     $organization = $this->createOrganizationUseCase->execute($data);
@@ -54,8 +52,6 @@ class OrganizationController
   {
     $data = $request->validate([
       'name' => 'sometimes|string|max:255',
-      'description' => 'nullable|string',
-      'is_system' => 'boolean',
     ]);
 
     $updated = $this->updateOrganizationUseCase->execute($id, $data);

@@ -14,17 +14,13 @@ class Project extends Model
   protected $fillable = [
     'name',
     'slug',
-    'description',
-    'is_system',
-    'organization_id',
+    'is_multitenant',
   ];
 
   protected $casts = [
     'name' => 'string',
     'slug' => 'string',
-    'description' => 'string',
-    'is_system' => 'boolean',
-    'organization_id' => 'integer',
+    'is_multitenant' => 'boolean',
     'created_at' => 'datetime',
     'updated_at' => 'datetime',
   ];

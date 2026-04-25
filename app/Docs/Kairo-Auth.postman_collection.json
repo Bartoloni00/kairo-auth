@@ -238,7 +238,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"updated@example.com\",\n    \"is_root\": false\n}",
+							"raw": "{\n    \"email\": \"updated@example.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -353,7 +353,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"New Organization\",\n    \"description\": \"Description of the organization\",\n    \"is_system\": false\n}",
+							"raw": "{\n    \"name\": \"New Organization\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -544,7 +544,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"New Project\",\n    \"description\": \"Description of the project\",\n    \"organization_id\": 1,\n    \"is_system\": false\n}",
+							"raw": "{\n    \"name\": \"New Project\",\n    \"is_multitenant\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"

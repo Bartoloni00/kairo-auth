@@ -30,9 +30,7 @@ class OrganizationControllerDoc
             content: new OA\JsonContent(
                 required: ["name"],
                 properties: [
-                    new OA\Property(property: "name", type: "string"),
-                    new OA\Property(property: "description", type: "string"),
-                    new OA\Property(property: "is_system", type: "boolean")
+                    new OA\Property(property: "name", type: "string")
                 ]
             )
         ),
@@ -71,9 +69,7 @@ class OrganizationControllerDoc
         requestBody: new OA\RequestBody(
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "name", type: "string"),
-                    new OA\Property(property: "description", type: "string"),
-                    new OA\Property(property: "is_system", type: "boolean")
+                    new OA\Property(property: "name", type: "string")
                 ]
             )
         ),

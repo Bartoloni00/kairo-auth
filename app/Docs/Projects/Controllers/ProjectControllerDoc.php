@@ -28,12 +28,10 @@ class ProjectControllerDoc
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ["name", "organization_id"],
+                required: ["name"],
                 properties: [
                     new OA\Property(property: "name", type: "string"),
-                    new OA\Property(property: "description", type: "string"),
-                    new OA\Property(property: "is_system", type: "boolean"),
-                    new OA\Property(property: "organization_id", type: "integer")
+                    new OA\Property(property: "is_multitenant", type: "boolean")
                 ]
             )
         ),
@@ -73,9 +71,7 @@ class ProjectControllerDoc
             content: new OA\JsonContent(
                 properties: [
                     new OA\Property(property: "name", type: "string"),
-                    new OA\Property(property: "description", type: "string"),
-                    new OA\Property(property: "is_system", type: "boolean"),
-                    new OA\Property(property: "organization_id", type: "integer")
+                    new OA\Property(property: "is_multitenant", type: "boolean")
                 ]
             )
         ),

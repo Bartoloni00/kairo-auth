@@ -5,9 +5,7 @@ namespace App\Modules\Users\Interfaces\Http;
 use Illuminate\Support\ServiceProvider;
 use App\Modules\Users\Application\Ports\UserRepositoryInterface;
 use App\Modules\Users\Infraestructure\Adapters\UserRepository;
-use Illuminate\Contracts\Support\DeferrableProvider;
-
-class UsersServiceProvider extends ServiceProvider implements DeferrableProvider
+class UsersServiceProvider extends ServiceProvider
 {
   /**
    * Register any application services.

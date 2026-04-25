@@ -40,10 +40,8 @@ class ProjectController
   public function store(Request $request): JsonResponse
   {
     $data = $request->validate([
-      'name' => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'is_system' => 'boolean',
-      'organization_id' => 'required|exists:organizations,id',
+      'name' => 'required|string|max:255|unique:projects,name',
+      'is_multitenant' => 'boolean',
     ]);
 
     $project = $this->createProjectUseCase->execute($data);
@@ -54,10 +52,8 @@ class ProjectController
   public function update(Request $request, int $id): JsonResponse
   {
     $data = $request->validate([
-      'name' => 'sometimes|string|max:255',
-      'description' => 'nullable|string',
-      'is_system' => 'boolean',
-      'organization_id' => 'sometimes|exists:organizations,id',
+      'name' => 'sometimes|string|max:255|unique:projects,name,' . $id,
+      'is_multitenant' => 'boolean',
     ]);
 
     $updated = $this->updateProjectUseCase->execute($id, $data);

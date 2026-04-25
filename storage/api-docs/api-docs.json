@@ -165,12 +165,6 @@
                                 "properties": {
                                     "name": {
                                         "type": "string"
-                                    },
-                                    "description": {
-                                        "type": "string"
-                                    },
-                                    "is_system": {
-                                        "type": "boolean"
                                     }
                                 },
                                 "type": "object"
@@ -247,12 +241,6 @@
                                 "properties": {
                                     "name": {
                                         "type": "string"
-                                    },
-                                    "description": {
-                                        "type": "string"
-                                    },
-                                    "is_system": {
-                                        "type": "boolean"
                                     }
                                 },
                                 "type": "object"
@@ -338,21 +326,14 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name",
-                                    "organization_id"
+                                    "name"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string"
                                     },
-                                    "description": {
-                                        "type": "string"
-                                    },
-                                    "is_system": {
+                                    "is_multitenant": {
                                         "type": "boolean"
-                                    },
-                                    "organization_id": {
-                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -430,14 +411,8 @@
                                     "name": {
                                         "type": "string"
                                     },
-                                    "description": {
-                                        "type": "string"
-                                    },
-                                    "is_system": {
+                                    "is_multitenant": {
                                         "type": "boolean"
-                                    },
-                                    "organization_id": {
-                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -571,9 +546,6 @@
                                     "password": {
                                         "type": "string",
                                         "format": "password"
-                                    },
-                                    "is_root": {
-                                        "type": "boolean"
                                     }
                                 },
                                 "type": "object"
