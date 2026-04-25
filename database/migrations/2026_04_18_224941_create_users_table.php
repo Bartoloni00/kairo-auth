@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('email')->nullable()->unique();
             $table->string('password')->nullable();
             $table->boolean('is_root')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

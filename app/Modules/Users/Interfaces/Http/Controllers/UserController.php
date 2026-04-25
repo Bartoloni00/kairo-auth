@@ -8,8 +8,8 @@ use App\Modules\Users\Application\UseCases\{
   UpdateUserUseCase,
   DeleteUserUseCase
 };
+use App\Modules\Users\Application\Requests\UpdateUserRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class UserController
 {
@@ -35,15 +35,9 @@ class UserController
     return response()->json($user);
   }
 
-  public function update(Request $request, int $id): JsonResponse
+  public function update(UpdateUserRequest $request, int $id): JsonResponse
   {
-    // Basic validation for now, or create a specific Request class
-    $data = $request->validate([
-      'email' => 'sometimes|email|unique:users,email,' . $id,
-      'password' => 'sometimes|min:6',
-    ]);
-
-    $updated = $this->updateUserUseCase->execute($id, $data);
+    $updated = $this->updateUserUseCase->execute($id, $request->validated());
     if (!$updated) {
       return response()->json(['message' => 'User not found or update failed'], 404);
     }

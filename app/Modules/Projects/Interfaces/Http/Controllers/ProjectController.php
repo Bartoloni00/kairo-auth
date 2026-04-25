@@ -9,8 +9,11 @@ use App\Modules\Projects\Application\UseCases\{
   UpdateProjectUseCase,
   DeleteProjectUseCase
 };
+use App\Modules\Projects\Application\Requests\{
+  CreateProjectRequest,
+  UpdateProjectRequest
+};
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ProjectController
 {
@@ -37,26 +40,15 @@ class ProjectController
     return response()->json($project);
   }
 
-  public function store(Request $request): JsonResponse
+  public function store(CreateProjectRequest $request): JsonResponse
   {
-    $data = $request->validate([
-      'name' => 'required|string|max:255|unique:projects,name',
-      'is_multitenant' => 'boolean',
-    ]);
-
-    $project = $this->createProjectUseCase->execute($data);
-
+    $project = $this->createProjectUseCase->execute($request->validated());
     return response()->json($project, 201);
   }
 
-  public function update(Request $request, int $id): JsonResponse
+  public function update(UpdateProjectRequest $request, int $id): JsonResponse
   {
-    $data = $request->validate([
-      'name' => 'sometimes|string|max:255|unique:projects,name,' . $id,
-      'is_multitenant' => 'boolean',
-    ]);
-
-    $updated = $this->updateProjectUseCase->execute($id, $data);
+    $updated = $this->updateProjectUseCase->execute($id, $request->validated());
     if (!$updated) {
       return response()->json(['message' => 'Project not found or update failed'], 404);
     }

@@ -9,8 +9,11 @@ use App\Modules\Organizations\Application\UseCases\{
   UpdateOrganizationUseCase,
   DeleteOrganizationUseCase
 };
+use App\Modules\Organizations\Application\Requests\{
+  CreateOrganizationRequest,
+  UpdateOrganizationRequest
+};
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class OrganizationController
 {
@@ -37,24 +40,15 @@ class OrganizationController
     return response()->json($organization);
   }
 
-  public function store(Request $request): JsonResponse
+  public function store(CreateOrganizationRequest $request): JsonResponse
   {
-    $data = $request->validate([
-      'name' => 'required|string|max:255',
-    ]);
-
-    $organization = $this->createOrganizationUseCase->execute($data);
-
+    $organization = $this->createOrganizationUseCase->execute($request->validated());
     return response()->json($organization, 201);
   }
 
-  public function update(Request $request, int $id): JsonResponse
+  public function update(UpdateOrganizationRequest $request, int $id): JsonResponse
   {
-    $data = $request->validate([
-      'name' => 'sometimes|string|max:255',
-    ]);
-
-    $updated = $this->updateOrganizationUseCase->execute($id, $data);
+    $updated = $this->updateOrganizationUseCase->execute($id, $request->validated());
     if (!$updated) {
       return response()->json(['message' => 'Organization not found or update failed'], 404);
     }

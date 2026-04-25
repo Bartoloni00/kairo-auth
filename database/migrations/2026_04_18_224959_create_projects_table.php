@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->boolean('is_multitenant')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
