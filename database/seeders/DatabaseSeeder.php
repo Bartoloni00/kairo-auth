@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Modules\Users\Domain\Entities\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +20,7 @@ class DatabaseSeeder extends Seeder
             ProjectUserAccessSeeder::class,
             PlansSeeder::class,
         ]);
+
+        User::factory()->count(20)->withAccess()->create();
     }
 }

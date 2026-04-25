@@ -33,6 +33,6 @@ class Project extends Model
 
   protected static function newFactory()
   {
-    //return ProjectFactory::new();
+    return \Database\Factories\ProjectFactory::new();
   }
 }

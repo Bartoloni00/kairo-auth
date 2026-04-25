@@ -29,6 +29,6 @@ class Organization extends Model
 
   protected static function newFactory()
   {
-    //return OrganizationFactory::new();
+    return \Database\Factories\OrganizationFactory::new();
   }
 }

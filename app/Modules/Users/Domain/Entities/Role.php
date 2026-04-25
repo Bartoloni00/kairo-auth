@@ -14,7 +14,6 @@ class Role extends Model
 
   protected $fillable = [
     'name',
-    'slug',
     'description',
     'is_system',
     'project_id'
@@ -22,7 +21,6 @@ class Role extends Model
 
   protected $casts = [
     'name' => 'string',
-    'slug' => 'string',
     'description' => 'string',
     'is_system' => 'boolean',
     'project_id' => 'integer',
@@ -32,6 +30,6 @@ class Role extends Model
 
   protected static function newFactory()
   {
-    //  return RoleFactory::new();
+    return \Database\Factories\RoleFactory::new();
   }
 }

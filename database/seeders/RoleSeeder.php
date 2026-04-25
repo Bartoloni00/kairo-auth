@@ -12,7 +12,6 @@ class RoleSeeder extends Seeder
     Role::create([
       'project_id' => null, // Global system role
       'name' => 'Root',
-      'slug' => 'root',
       'description' => 'Super admin',
       'is_system' => true,
     ]);
@@ -20,7 +19,6 @@ class RoleSeeder extends Seeder
     Role::create([
       'project_id' => null,
       'name' => 'Admin',
-      'slug' => 'admin',
       'description' => 'Cliente administrador',
       'is_system' => true,
     ]);
