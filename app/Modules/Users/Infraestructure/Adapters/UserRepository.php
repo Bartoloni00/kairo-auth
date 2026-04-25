@@ -20,4 +20,23 @@ class UserRepository implements UserRepositoryInterface
   {
     return User::find($id);
   }
+
+  public function all(): \Illuminate\Database\Eloquent\Collection
+  {
+    return User::all();
+  }
+
+  public function update(int $id, array $data): bool
+  {
+    $user = User::find($id);
+    if (!$user) return false;
+    return $user->update($data);
+  }
+
+  public function delete(int $id): bool
+  {
+    $user = User::find($id);
+    if (!$user) return false;
+    return $user->delete();
+  }
 }
