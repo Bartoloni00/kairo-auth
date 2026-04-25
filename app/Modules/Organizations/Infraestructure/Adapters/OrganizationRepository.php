@@ -18,9 +18,22 @@ class OrganizationRepository implements OrganizationRepositoryInterface
     return Organization::find($id);
   }
 
-  public function all(): Collection
+  public function all(?\App\Modules\Users\Domain\Entities\User $authUser = null, array $filters = []): Collection
   {
-    return Organization::all();
+    $query = Organization::query();
+    $showDeleted = ($authUser && $authUser->is_root && ($filters['deleted'] ?? '') === 'true');
+
+    if ($showDeleted) {
+      $query->withTrashed();
+    }
+
+    $organizations = $query->get();
+
+    if ($showDeleted) {
+      $organizations->each->makeVisible('deleted_at');
+    }
+
+    return $organizations;
   }
 
   public function update(int $id, array $data): bool

@@ -19,6 +19,10 @@ class Project extends Model
     'is_multitenant',
   ];
 
+  protected $hidden = [
+    'deleted_at',
+  ];
+
   protected $casts = [
     'name' => 'string',
     'slug' => 'string',

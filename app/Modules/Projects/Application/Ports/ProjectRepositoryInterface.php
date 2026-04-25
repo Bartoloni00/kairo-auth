@@ -9,7 +9,7 @@ interface ProjectRepositoryInterface
 {
   public function create(array $data): Project;
   public function findById(int $id): ?Project;
-  public function all(): Collection;
+  public function all(?\App\Modules\Users\Domain\Entities\User $authUser = null, array $filters = []): Collection;
   public function update(int $id, array $data): bool;
   public function delete(int $id): bool;
 }

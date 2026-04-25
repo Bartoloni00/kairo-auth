@@ -24,6 +24,8 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
+        'deleted_at',
+        'is_root'
     ];
 
     protected $casts = [
@@ -37,5 +39,10 @@ class User extends Authenticatable
     protected static function newFactory()
     {
         //return UserFactory::new();
+    }
+
+    public function access()
+    {
+        return $this->hasMany(ProjectUserAccess::class);
     }
 }

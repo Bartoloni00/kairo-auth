@@ -17,6 +17,10 @@ class Organization extends Model
     'name',
   ];
 
+  protected $hidden = [
+    'deleted_at',
+  ];
+
   protected $casts = [
     'name' => 'string',
     'created_at' => 'datetime',

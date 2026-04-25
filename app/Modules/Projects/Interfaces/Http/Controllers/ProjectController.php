@@ -13,7 +13,10 @@ use App\Modules\Projects\Application\Requests\{
   CreateProjectRequest,
   UpdateProjectRequest
 };
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\{
+  JsonResponse,
+  Request
+};
 
 class ProjectController
 {
@@ -25,9 +28,9 @@ class ProjectController
     private readonly DeleteProjectUseCase $deleteProjectUseCase
   ) {}
 
-  public function index(): JsonResponse
+  public function index(Request $request): JsonResponse
   {
-    $projects = $this->listProjectsUseCase->execute();
+    $projects = $this->listProjectsUseCase->execute($request->user(), $request->all());
     return response()->json($projects);
   }
 

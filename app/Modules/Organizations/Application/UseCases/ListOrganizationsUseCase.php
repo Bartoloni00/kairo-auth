@@ -11,8 +11,8 @@ class ListOrganizationsUseCase
     private readonly OrganizationRepositoryInterface $organizationRepository
   ) {}
 
-  public function execute(): Collection
+  public function execute(?\App\Modules\Users\Domain\Entities\User $authUser = null, array $filters = []): Collection
   {
-    return $this->organizationRepository->all();
+    return $this->organizationRepository->all($authUser, $filters);
   }
 }

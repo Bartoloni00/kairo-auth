@@ -170,12 +170,30 @@
 							}
 						],
 						"url": {
-							"raw": "{{API}}/users",
+							"raw": "{{API}}/users?organization_id=&project_id=",
 							"host": [
 								"{{API}}"
 							],
 							"path": [
 								"users"
+							],
+							"query": [
+								{
+									"key": "organization_id",
+									"value": "",
+									"description": "Filtrar por ID de organización"
+								},
+								{
+									"key": "project_id",
+									"value": "",
+									"description": "Filtrar por ID de proyecto"
+								},
+								{
+									"key": "deleted",
+									"value": "true",
+									"description": "Ver eliminados (Solo root)",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -319,12 +337,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{API}}/organizations",
+							"raw": "{{API}}/organizations?deleted=true",
 							"host": [
 								"{{API}}"
 							],
 							"path": [
 								"organizations"
+							],
+							"query": [
+								{
+									"key": "deleted",
+									"value": "true",
+									"description": "Ver eliminados (Solo root)",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -510,12 +536,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{API}}/projects",
+							"raw": "{{API}}/projects?deleted=true",
 							"host": [
 								"{{API}}"
 							],
 							"path": [
 								"projects"
+							],
+							"query": [
+								{
+									"key": "deleted",
+									"value": "true",
+									"description": "Ver eliminados (Solo root)",
+									"disabled": true
+								}
 							]
 						}
 					},

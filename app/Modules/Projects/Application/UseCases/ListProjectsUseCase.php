@@ -11,8 +11,8 @@ class ListProjectsUseCase
     private readonly ProjectRepositoryInterface $projectRepository
   ) {}
 
-  public function execute(): Collection
+  public function execute(?\App\Modules\Users\Domain\Entities\User $authUser = null, array $filters = []): Collection
   {
-    return $this->projectRepository->all();
+    return $this->projectRepository->all($authUser, $filters);
   }
 }

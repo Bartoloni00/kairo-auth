@@ -12,6 +12,11 @@ class UserControllerDoc
         operationId: "listUsers",
         tags: ["Usuarios"],
         security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "organization_id", in: "query", required: false, schema: new OA\Schema(type: "integer")),
+            new OA\Parameter(name: "project_id", in: "query", required: false, schema: new OA\Schema(type: "integer")),
+            new OA\Parameter(name: "deleted", in: "query", required: false, schema: new OA\Schema(type: "boolean"))
+        ],
         responses: [
             new OA\Response(response: 200, description: "Lista de usuarios"),
             new OA\Response(response: 401, description: "No autenticado")

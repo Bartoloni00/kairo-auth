@@ -25,9 +25,9 @@ class OrganizationController
     private readonly DeleteOrganizationUseCase $deleteOrganizationUseCase
   ) {}
 
-  public function index(): JsonResponse
+  public function index(\Illuminate\Http\Request $request): JsonResponse
   {
-    $organizations = $this->listOrganizationsUseCase->execute();
+    $organizations = $this->listOrganizationsUseCase->execute($request->user(), $request->all());
     return response()->json($organizations);
   }
 

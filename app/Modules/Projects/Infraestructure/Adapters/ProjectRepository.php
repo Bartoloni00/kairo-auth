@@ -18,9 +18,22 @@ class ProjectRepository implements ProjectRepositoryInterface
     return Project::find($id);
   }
 
-  public function all(): Collection
+  public function all(?\App\Modules\Users\Domain\Entities\User $authUser = null, array $filters = []): Collection
   {
-    return Project::all();
+    $query = Project::query();
+    $showDeleted = ($authUser && $authUser->is_root && ($filters['deleted'] ?? '') === 'true');
+
+    if ($showDeleted) {
+      $query->withTrashed();
+    }
+
+    $projects = $query->get();
+
+    if ($showDeleted) {
+      $projects->each->makeVisible('deleted_at');
+    }
+
+    return $projects;
   }
 
   public function update(int $id, array $data): bool

@@ -10,8 +10,10 @@ class OrganizationControllerDoc
         path: "/api/organizations",
         summary: "Listar organizaciones",
         operationId: "listOrganizations",
-        tags: ["Organizaciones"],
         security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "deleted", in: "query", required: false, schema: new OA\Schema(type: "boolean"))
+        ],
         responses: [
             new OA\Response(response: 200, description: "Lista de organizaciones"),
             new OA\Response(response: 401, description: "No autenticado")

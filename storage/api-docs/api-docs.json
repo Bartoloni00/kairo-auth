@@ -129,11 +129,18 @@
         },
         "/api/organizations": {
             "get": {
-                "tags": [
-                    "Organizaciones"
-                ],
                 "summary": "Listar organizaciones",
                 "operationId": "listOrganizations",
+                "parameters": [
+                    {
+                        "name": "deleted",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Lista de organizaciones"
@@ -295,11 +302,18 @@
         },
         "/api/projects": {
             "get": {
-                "tags": [
-                    "Proyectos"
-                ],
                 "summary": "Listar proyectos",
                 "operationId": "listProjects",
+                "parameters": [
+                    {
+                        "name": "deleted",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Lista de proyectos"
@@ -472,6 +486,32 @@
                 ],
                 "summary": "Listar usuarios",
                 "operationId": "listUsers",
+                "parameters": [
+                    {
+                        "name": "organization_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "project_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "deleted",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Lista de usuarios"

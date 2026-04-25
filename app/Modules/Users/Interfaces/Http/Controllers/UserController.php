@@ -9,6 +9,7 @@ use App\Modules\Users\Application\UseCases\{
   DeleteUserUseCase
 };
 use App\Modules\Users\Application\Requests\UpdateUserRequest;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class UserController
@@ -20,15 +21,15 @@ class UserController
     private readonly DeleteUserUseCase $deleteUserUseCase
   ) {}
 
-  public function index(): JsonResponse
+  public function index(Request $request): JsonResponse
   {
-    $users = $this->listUsersUseCase->execute();
+    $users = $this->listUsersUseCase->execute($request->user(), $request->all());
     return response()->json($users);
   }
 
-  public function show(int $id): JsonResponse
+  public function show(Request $request, int $id): JsonResponse
   {
-    $user = $this->getUserUseCase->execute($id);
+    $user = $this->getUserUseCase->execute($id, $request->user());
     if (!$user) {
       return response()->json(['message' => 'User not found'], 404);
     }

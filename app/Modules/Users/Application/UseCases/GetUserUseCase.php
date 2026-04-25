@@ -11,8 +11,26 @@ class GetUserUseCase
     private readonly UserRepositoryInterface $userRepository
   ) {}
 
-  public function execute(int $id): ?User
+  public function execute(int $id, ?User $authUser = null): ?User
   {
-    return $this->userRepository->findById($id);
+    $user = $this->userRepository->findById($id);
+
+    if ($user && $authUser && !$authUser->is_root) {
+      // Check if they share any project or organization
+      $myAccess = $authUser->access;
+      $myProjects = $myAccess->pluck('project_id')->filter()->unique()->toArray();
+      $myOrgs = $myAccess->pluck('organization_id')->filter()->unique()->toArray();
+
+      $hasAccess = $user->access()->where(function ($q) use ($myProjects, $myOrgs) {
+        $q->whereIn('project_id', $myProjects)
+          ->orWhereIn('organization_id', $myOrgs);
+      })->exists();
+
+      if (!$hasAccess) {
+        return null;
+      }
+    }
+
+    return $user;
   }
 }

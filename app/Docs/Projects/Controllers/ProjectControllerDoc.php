@@ -10,8 +10,10 @@ class ProjectControllerDoc
         path: "/api/projects",
         summary: "Listar proyectos",
         operationId: "listProjects",
-        tags: ["Proyectos"],
         security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "deleted", in: "query", required: false, schema: new OA\Schema(type: "boolean"))
+        ],
         responses: [
             new OA\Response(response: 200, description: "Lista de proyectos"),
             new OA\Response(response: 401, description: "No autenticado")
