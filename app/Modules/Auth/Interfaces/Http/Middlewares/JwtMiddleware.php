@@ -3,9 +3,11 @@
 namespace App\Modules\Auth\Interfaces\Http\Middlewares;
 
 use Closure;
-use Illuminate\Http\Request;
-use App\Modules\Users\Application\Ports\UserRepositoryInterface;
 use Exception;
+use Illuminate\Http\Request;
+
+use App\Shared\Helpers\Enums\ApiMessageEnum;
+use App\Modules\Users\Application\Ports\UserRepositoryInterface;
 
 class JwtMiddleware
 {
@@ -18,7 +20,7 @@ class JwtMiddleware
     $header = $request->header('Authorization');
 
     if (!$header || !str_starts_with($header, 'Bearer ')) {
-      throw new Exception('Token not provided');
+      throw new Exception(ApiMessageEnum::TOKEN_NOT_PROVIDED);
     }
 
     $token = str_replace('Bearer ', '', $header);
@@ -28,17 +30,17 @@ class JwtMiddleware
     $payload = json_decode(base64_decode($payload), true);
 
     if (!$payload || !isset($payload['user_id'])) {
-      throw new Exception('Invalid token');
+      throw new Exception(ApiMessageEnum::TOKEN_INVALID);
     }
 
     if ($payload['exp'] < time()) {
-      throw new Exception('Token expired');
+      throw new Exception(ApiMessageEnum::TOKEN_EXPIRED);
     }
 
     $user = $this->userRepository->findById($payload['user_id']);
 
     if (!$user) {
-      throw new Exception('User not found');
+      throw new Exception(ApiMessageEnum::USER_NOT_FOUND);
     }
 
     $request->attributes->set('user', $user);
