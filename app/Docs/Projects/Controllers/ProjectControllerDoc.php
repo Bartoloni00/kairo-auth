@@ -6,19 +6,6 @@ use OpenApi\Attributes as OA;
 
 class ProjectControllerDoc
 {
-    #[OA\Get(
-        path: "/api/projects",
-        summary: "Listar proyectos",
-        operationId: "listProjects",
-        security: [["bearerAuth" => []]],
-        parameters: [
-            new OA\Parameter(name: "deleted", in: "query", required: false, schema: new OA\Schema(type: "boolean"))
-        ],
-        responses: [
-            new OA\Response(response: 200, description: "Lista de proyectos"),
-            new OA\Response(response: 401, description: "No autenticado")
-        ]
-    )]
     public function index() {}
 
     #[OA\Post(

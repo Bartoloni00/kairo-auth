@@ -116,45 +116,7 @@
                 ]
             }
         },
-        "/api/test": {
-            "get": {
-                "summary": "Endpoint de prueba",
-                "operationId": "a8737c527d9c2de503f04095adcbe276",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/api/organizations": {
-            "get": {
-                "summary": "Listar organizaciones",
-                "operationId": "listOrganizations",
-                "parameters": [
-                    {
-                        "name": "deleted",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Lista de organizaciones"
-                    },
-                    "401": {
-                        "description": "No autenticado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
             "post": {
                 "tags": [
                     "Organizaciones"
@@ -301,33 +263,6 @@
             }
         },
         "/api/projects": {
-            "get": {
-                "summary": "Listar proyectos",
-                "operationId": "listProjects",
-                "parameters": [
-                    {
-                        "name": "deleted",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Lista de proyectos"
-                    },
-                    "401": {
-                        "description": "No autenticado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
             "post": {
                 "tags": [
                     "Proyectos"

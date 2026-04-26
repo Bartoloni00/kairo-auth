@@ -23,15 +23,5 @@ use OpenApi\Attributes as OA;
 )]
 class OpenApiSpec
 {
-  #[OA\Get(
-    path: "/api/test",
-    summary: "Endpoint de prueba",
-    responses: [
-      new OA\Response(
-        response: 200,
-        description: "OK"
-      )
-    ]
-  )]
   public function test() {}
 }

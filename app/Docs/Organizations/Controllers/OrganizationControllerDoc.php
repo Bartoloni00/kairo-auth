@@ -6,19 +6,6 @@ use OpenApi\Attributes as OA;
 
 class OrganizationControllerDoc
 {
-    #[OA\Get(
-        path: "/api/organizations",
-        summary: "Listar organizaciones",
-        operationId: "listOrganizations",
-        security: [["bearerAuth" => []]],
-        parameters: [
-            new OA\Parameter(name: "deleted", in: "query", required: false, schema: new OA\Schema(type: "boolean"))
-        ],
-        responses: [
-            new OA\Response(response: 200, description: "Lista de organizaciones"),
-            new OA\Response(response: 401, description: "No autenticado")
-        ]
-    )]
     public function index() {}
 
     #[OA\Post(
