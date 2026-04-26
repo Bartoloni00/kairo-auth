@@ -40,10 +40,10 @@ class UserControllerDoc
     )]
     public function show() {}
 
-    #[OA\Put(
-        path: "/api/users/{id}",
-        summary: "Actualizar un usuario",
-        operationId: "updateUser",
+    #[OA\Post(
+        path: "/api/users/{id}/projects",
+        summary: "Agregar usuario a un proyecto",
+        operationId: "addUserToProject",
         tags: ["Usuarios"],
         security: [["bearerAuth" => []]],
         parameters: [
@@ -52,17 +52,121 @@ class UserControllerDoc
         requestBody: new OA\RequestBody(
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: "email", type: "string", format: "email"),
-                    new OA\Property(property: "password", type: "string", format: "password")
+                    new OA\Property(property: "project_id", type: "integer", example: 1),
+                    new OA\Property(property: "role_id", type: "integer", example: 2)
                 ]
             )
         ),
         responses: [
-            new OA\Response(response: 200, description: "Usuario actualizado"),
+            new OA\Response(response: 200, description: "Usuario agregado al proyecto"),
             new OA\Response(response: 404, description: "Usuario no encontrado")
         ]
     )]
-    public function update() {}
+    public function addToProject() {}
+
+    #[OA\Post(
+        path: "/api/users/{id}/organizations",
+        summary: "Agregar usuario a una organización",
+        operationId: "addUserToOrganization",
+        tags: ["Usuarios"],
+        security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "organization_id", type: "integer", example: 1),
+                    new OA\Property(property: "role_id", type: "integer", example: 2)
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Usuario agregado a la organización"),
+            new OA\Response(response: 404, description: "Usuario no encontrado")
+        ]
+    )]
+    public function addToOrganization() {}
+
+    #[OA\Delete(
+        path: "/api/users/{id}/projects/{projectId}",
+        summary: "Eliminar usuario de un proyecto",
+        operationId: "removeUserFromProject",
+        tags: ["Usuarios"],
+        security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+            new OA\Parameter(name: "projectId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Usuario eliminado del proyecto"),
+            new OA\Response(response: 404, description: "Usuario no encontrado o no está en el proyecto")
+        ]
+    )]
+    public function removeFromProject() {}
+
+    #[OA\Delete(
+        path: "/api/users/{id}/organizations/{organizationId}",
+        summary: "Eliminar usuario de una organización",
+        operationId: "removeUserFromOrganization",
+        tags: ["Usuarios"],
+        security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+            new OA\Parameter(name: "organizationId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Usuario eliminado de la organización"),
+            new OA\Response(response: 404, description: "Usuario no encontrado o no está en la organización")
+        ]
+    )]
+    public function removeFromOrganization() {}
+
+    #[OA\Put(
+        path: "/api/users/{id}/email",
+        summary: "Actualizar email de usuario",
+        operationId: "updateUserEmail",
+        tags: ["Usuarios"],
+        security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "email", type: "string", example: "user@example.com")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Email actualizado"),
+            new OA\Response(response: 404, description: "Usuario no encontrado")
+        ]
+    )]
+    public function updateEmail() {}
+
+    #[OA\Put(
+        path: "/api/users/{id}/password",
+        summary: "Actualizar contraseña de usuario",
+        operationId: "updateUserPassword",
+        tags: ["Usuarios"],
+        security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "password", type: "string", example: "newpassword123")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Contraseña actualizada"),
+            new OA\Response(response: 404, description: "Usuario no encontrado")
+        ]
+    )]
+    public function updatePassword() {}
 
     #[OA\Delete(
         path: "/api/users/{id}",

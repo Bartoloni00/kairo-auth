@@ -29,4 +29,36 @@ class ProjectUserAccess extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function project()
+    {
+        return $this->belongsTo(\App\Modules\Projects\Domain\Entities\Project::class);
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(\App\Modules\Organizations\Domain\Entities\Organization::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function toArray()
+    {
+        $project = $this->project ? $this->project->toArray() : null;
+        $organization = $this->organization ? $this->organization->toArray() : null;
+        $role = $this->role ? $this->role->toArray() : null;
+
+        if ($project && $organization) {
+            $organization['role'] = $role;
+            $project['organization'] = $organization;
+        }
+
+        return [
+            'project_id' => $this->project_id,
+            'project' => $project
+        ];
+    }
 }

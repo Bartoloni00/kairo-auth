@@ -19,12 +19,12 @@ class UserRepository implements UserRepositoryInterface
 
   public function findById(int $id): ?User
   {
-    return User::find($id);
+    return User::with(['access.project', 'access.organization', 'access.role'])->find($id);
   }
 
   public function all(?User $authUser = null, array $filters = []): Collection
   {
-    $query = User::query();
+    $query = User::with(['access.project', 'access.organization', 'access.role']);
     $showDeleted = ($authUser && $authUser->is_root && ($filters['deleted'] ?? '') === 'true');
 
     if ($showDeleted) {
@@ -68,8 +68,24 @@ class UserRepository implements UserRepositoryInterface
   public function update(int $id, array $data): bool
   {
     $user = User::find($id);
-    if (!$user) return false;
-    return $user->update($data);
+    if (!$user) {
+      return false;
+    }
+
+    return \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data) {
+      // Update user basic info
+      $user->update(\Illuminate\Support\Arr::except($data, ['access']));
+
+      // Sync access if provided
+      if (isset($data['access'])) {
+        $user->access()->delete();
+        foreach ($data['access'] as $accessData) {
+          $user->access()->create($accessData);
+        }
+      }
+
+      return true;
+    });
   }
 
   public function delete(int $id): bool
@@ -77,5 +93,68 @@ class UserRepository implements UserRepositoryInterface
     $user = User::find($id);
     if (!$user) return false;
     return $user->delete();
+  }
+
+  public function addToProject(int $userId, int $projectId, ?int $roleId = null): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    // Use a default role if none provided (e.g. role_id 2 for member)
+    $roleId = $roleId ?? 2;
+
+    $user->access()->create([
+      'project_id' => $projectId,
+      'role_id' => $roleId
+    ]);
+
+    return true;
+  }
+
+  public function addToOrganization(int $userId, int $organizationId, ?int $roleId = null): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    $roleId = $roleId ?? 2;
+
+    $user->access()->create([
+      'organization_id' => $organizationId,
+      'role_id' => $roleId
+    ]);
+
+    return true;
+  }
+
+  public function removeFromProject(int $userId, int $projectId): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    return $user->access()->where('project_id', $projectId)->delete() > 0;
+  }
+
+  public function removeFromOrganization(int $userId, int $organizationId): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    return $user->access()->where('organization_id', $organizationId)->delete() > 0;
+  }
+
+  public function updateEmail(int $userId, string $email): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    return $user->update(['email' => $email]);
+  }
+
+  public function updatePassword(int $userId, string $password): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    return $user->update(['password' => \Illuminate\Support\Facades\Hash::make($password)]);
   }
 }

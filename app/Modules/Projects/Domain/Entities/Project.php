@@ -21,6 +21,9 @@ class Project extends Model
 
   protected $hidden = [
     'deleted_at',
+    'created_at',
+    'updated_at',
+    'is_multitenant',
   ];
 
   protected $casts = [

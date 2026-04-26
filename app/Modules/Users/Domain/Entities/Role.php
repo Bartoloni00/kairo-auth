@@ -19,6 +19,13 @@ class Role extends Model
     'project_id'
   ];
 
+  protected $hidden = [
+    'created_at',
+    'updated_at',
+    'is_system',
+    'description',
+  ];
+
   protected $casts = [
     'name' => 'string',
     'description' => 'string',

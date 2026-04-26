@@ -10,6 +10,10 @@ Route::prefix('auth')->controller(AuthController::class)->group(function () {
   // refresh no es necesario ya que si el usuario quiere generar un nuevo token puede simplemente cerrar sesion y volver a iniciar sesion
   //Route::post('logout', 'logout');
   //Route::post('refresh', 'refresh');
+  /*
+  - Publico
+  - modificar este registro para que solo pida: email, password y project_id lo demas debera quedar opcionalmente como null
+  */
   Route::post('register', 'register');
   Route::get('me', 'me')->middleware('jwt');
 });

@@ -25,8 +25,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'deleted_at',
-        'is_root'
+        'is_root',
+        'access',
     ];
+
+    protected $appends = ['projects'];
 
     protected $casts = [
         'email' => 'string',
@@ -44,5 +47,32 @@ class User extends Authenticatable
     public function access()
     {
         return $this->hasMany(ProjectUserAccess::class);
+    }
+
+    public function getProjectsAttribute()
+    {
+        $grouped = [];
+
+        foreach ($this->access as $item) {
+            $projectId = $item->project_id;
+
+            if (!isset($grouped[$projectId])) {
+                $project = $item->project;
+                if (!$project) {
+                    continue;
+                }
+
+                $grouped[$projectId] = $project->toArray();
+                $grouped[$projectId]['organizations'] = [];
+            }
+
+            $org = $item->organization ? $item->organization->toArray() : null;
+            if ($org) {
+                $org['role'] = $item->role ? $item->role->toArray() : null;
+                $grouped[$projectId]['organizations'][] = $org;
+            }
+        }
+
+        return array_values($grouped);
     }
 }
