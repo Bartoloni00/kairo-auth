@@ -21,6 +21,23 @@ use OpenApi\Attributes as OA;
   scheme: "bearer",
   bearerFormat: "JWT"
 )]
+#[OA\Schema(
+  schema: "SuccessResponse",
+  properties: [
+    new OA\Property(property: "status", type: "string", example: "success"),
+    new OA\Property(property: "data", type: "object", nullable: true),
+    new OA\Property(property: "message", type: "string", nullable: true)
+  ]
+)]
+#[OA\Schema(
+  schema: "ErrorResponse",
+  properties: [
+    new OA\Property(property: "status", type: "string", example: "error"),
+    new OA\Property(property: "message", type: "string"),
+    new OA\Property(property: "code", type: "string"),
+    new OA\Property(property: "details", type: "object", nullable: true)
+  ]
+)]
 class OpenApiSpec
 {
   public function test() {}

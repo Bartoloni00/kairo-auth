@@ -73,6 +73,7 @@ Consulta el archivo [INSTALL.md](./INSTALL.md) para ver los pasos detallados de 
 
 - [Sistema de Autorización](./app/Docs/AUTHORIZATION_MIDDLEWARE.md)
 - [Guía de Logs de Auditoría](./app/Docs/LOGS_GUIDE.md)
+- [Patrón de Respuestas API](./app/Docs/API_RESPONSE_PATTERN.md)
 - [Uso de Factories](./app/Docs/FACTORIES_GUIDE.md)
 
 ---
@@ -81,6 +82,7 @@ Consulta el archivo [INSTALL.md](./INSTALL.md) para ver los pasos detallados de 
 
 - [x] Implementación de JWT (Tymon)
 - [x] Arquitectura Modular Monolith
+- [x] Patrón Unificado de Respuestas API
 - [x] Sistema de Permisos Multi-tenant Granular
 - [x] Logs de Auditoría Automatizados
 - [ ] Implementación de SDK para aplicaciones satélite

@@ -5,12 +5,18 @@ namespace App\Modules\Auth\Interfaces\Http\Middlewares;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-
-use App\Shared\Helpers\Enums\ApiMessageEnum;
+use App\Shared\Interfaces\Http\Responses\ApiResponse;
+use App\Shared\Helpers\Enums\{
+  ApiMessageEnum,
+  ApiStatusCodeEnum,
+  ApiErrorCodeEnum
+};
 use App\Modules\Users\Application\Ports\UserRepositoryInterface;
 
 class JwtMiddleware
 {
+  use ApiResponse;
+
   public function __construct(
     private UserRepositoryInterface $userRepository
   ) {}
@@ -20,27 +26,54 @@ class JwtMiddleware
     $header = $request->header('Authorization');
 
     if (!$header || !str_starts_with($header, 'Bearer ')) {
-      throw new Exception(ApiMessageEnum::TOKEN_NOT_PROVIDED);
+      return $this->errorResponse(
+        ApiMessageEnum::TOKEN_NOT_PROVIDED,
+        ApiErrorCodeEnum::AUTH_FAILED->value,
+        ApiStatusCodeEnum::UNAUTHORIZED
+      );
     }
 
     $token = str_replace('Bearer ', '', $header);
 
-    [$header, $payload, $signature] = explode('.', $token);
-
-    $payload = json_decode(base64_decode($payload), true);
+    try {
+      $parts = explode('.', $token);
+      if (count($parts) !== 3) {
+        throw new Exception(ApiMessageEnum::TOKEN_INVALID);
+      }
+      [$header, $payload, $signature] = $parts;
+      $payload = json_decode(base64_decode($payload), true);
+    } catch (Exception $e) {
+      return $this->errorResponse(
+        ApiMessageEnum::TOKEN_INVALID,
+        ApiErrorCodeEnum::TOKEN_INVALID->value,
+        ApiStatusCodeEnum::UNAUTHORIZED
+      );
+    }
 
     if (!$payload || !isset($payload['user_id'])) {
-      throw new Exception(ApiMessageEnum::TOKEN_INVALID);
+      return $this->errorResponse(
+        ApiMessageEnum::TOKEN_INVALID,
+        ApiErrorCodeEnum::TOKEN_INVALID->value,
+        ApiStatusCodeEnum::UNAUTHORIZED
+      );
     }
 
     if ($payload['exp'] < time()) {
-      throw new Exception(ApiMessageEnum::TOKEN_EXPIRED);
+      return $this->errorResponse(
+        ApiMessageEnum::TOKEN_EXPIRED,
+        ApiErrorCodeEnum::TOKEN_EXPIRED->value,
+        ApiStatusCodeEnum::UNAUTHORIZED
+      );
     }
 
     $user = $this->userRepository->findById($payload['user_id']);
 
     if (!$user) {
-      throw new Exception(ApiMessageEnum::USER_NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::AUTH_FAILED->value,
+        ApiStatusCodeEnum::UNAUTHORIZED
+      );
     }
 
     $request->attributes->set('user', $user);

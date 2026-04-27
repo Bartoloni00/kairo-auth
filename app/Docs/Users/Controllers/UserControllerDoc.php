@@ -18,9 +18,21 @@ class UserControllerDoc
             new OA\Parameter(name: "deleted", in: "query", required: false, schema: new OA\Schema(type: "boolean"))
         ],
         responses: [
-            new OA\Response(response: 200, description: "Lista de usuarios"),
-            new OA\Response(response: 401, description: "No autenticado"),
-            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
+            new OA\Response(
+                response: 200, 
+                description: "Lista de usuarios",
+                content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")
+            ),
+            new OA\Response(
+                response: 401, 
+                description: "No autenticado",
+                content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")
+            ),
+            new OA\Response(
+                response: 403, 
+                description: "Prohibido - No tienes permisos",
+                content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")
+            )
         ]
     )]
     public function index() {}
@@ -35,9 +47,21 @@ class UserControllerDoc
             new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
         ],
         responses: [
-            new OA\Response(response: 200, description: "Usuario encontrado"),
-            new OA\Response(response: 404, description: "Usuario no encontrado"),
-            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
+            new OA\Response(
+                response: 200, 
+                description: "Usuario encontrado",
+                content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")
+            ),
+            new OA\Response(
+                response: 404, 
+                description: "Usuario no encontrado",
+                content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")
+            ),
+            new OA\Response(
+                response: 403, 
+                description: "Prohibido - No tienes permisos",
+                content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")
+            )
         ]
     )]
     public function show() {}

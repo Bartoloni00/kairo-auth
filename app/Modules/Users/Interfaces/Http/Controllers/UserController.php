@@ -19,15 +19,19 @@ use App\Modules\Users\Application\Requests\{
   UpdateUserEmailRequest,
   UpdateUserPasswordRequest
 };
+use App\Shared\Interfaces\Http\Responses\ApiResponse;
 use App\Shared\Helpers\Enums\{
   ApiStatusCodeEnum,
-  ApiMessageEnum
+  ApiMessageEnum,
+  ApiErrorCodeEnum
 };
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class UserController
 {
+  use ApiResponse;
+
   public function __construct(
     private readonly ListUsersUseCase $listUsersUseCase,
     private readonly GetUserUseCase $getUserUseCase,
@@ -43,109 +47,139 @@ class UserController
   public function index(Request $request): JsonResponse
   {
     $users = $this->listUsersUseCase->execute($request->user(), $request->all());
-    return response()->json($users);
+    return $this->successResponse($users);
   }
 
   public function show(Request $request, int $id): JsonResponse
   {
     $user = $this->getUserUseCase->execute($id, $request->user());
     if (!$user) {
-      return response()->json([
-        'message' => ApiMessageEnum::USER_NOT_FOUND
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
-    return response()->json($user);
+    return $this->successResponse($user);
   }
 
   public function destroy(int $id): JsonResponse
   {
     $deleted = $this->deleteUserUseCase->execute($id);
     if (!$deleted) {
-      return response()->json([
-        'message' => ApiMessageEnum::DELETE_FAILED
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::DELETE_FAILED,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
 
-    return response()->json([
-      'message' => ApiMessageEnum::USER_DELETED_SUCCESSFULLY
-    ], ApiStatusCodeEnum::NO_CONTENT);
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_DELETED_SUCCESSFULLY,
+      ApiStatusCodeEnum::SUCCESS // Changed from NO_CONTENT to SUCCESS to allow body if needed, or keep 204
+    );
   }
 
   public function addToProject(AddUserToProjectRequest $request, int $id): JsonResponse
   {
     $success = $this->addUserToProjectUseCase->execute($id, $request->project_id, $request->role_id);
     if (!$success) {
-      return response()->json([
-        'message' => ApiMessageEnum::USER_NOT_FOUND
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
-    return response()->json([
-      'message' => ApiMessageEnum::USER_ADDED_TO_PROJECT_SUCCESSFULLY
-    ], ApiStatusCodeEnum::CREATED);
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_ADDED_TO_PROJECT_SUCCESSFULLY,
+      ApiStatusCodeEnum::CREATED
+    );
   }
 
   public function addToOrganization(AddUserToOrganizationRequest $request, int $id): JsonResponse
   {
     $success = $this->addUserToOrganizationUseCase->execute($id, $request->organization_id, $request->role_id);
     if (!$success) {
-      return response()->json([
-        'message' => ApiMessageEnum::USER_NOT_FOUND
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
-    return response()->json([
-      'message' => ApiMessageEnum::USER_ADDED_TO_ORGANIZATION_SUCCESSFULLY
-    ], ApiStatusCodeEnum::CREATED);
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_ADDED_TO_ORGANIZATION_SUCCESSFULLY,
+      ApiStatusCodeEnum::CREATED
+    );
   }
 
   public function removeFromProject(int $id, int $projectId): JsonResponse
   {
     $success = $this->removeUserFromProjectUseCase->execute($id, $projectId);
     if (!$success) {
-      return response()->json([
-        'message' => ApiMessageEnum::USER_NOT_FOUND
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
-    return response()->json([
-      'message' => ApiMessageEnum::USER_REMOVED_FROM_PROJECT_SUCCESSFULLY
-    ], ApiStatusCodeEnum::NO_CONTENT);
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_REMOVED_FROM_PROJECT_SUCCESSFULLY,
+      ApiStatusCodeEnum::SUCCESS
+    );
   }
 
   public function removeFromOrganization(int $id, int $organizationId): JsonResponse
   {
     $success = $this->removeUserFromOrganizationUseCase->execute($id, $organizationId);
     if (!$success) {
-      return response()->json([
-        'message' => ApiMessageEnum::USER_NOT_FOUND
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
-    return response()->json([
-      'message' => ApiMessageEnum::USER_REMOVED_FROM_ORGANIZATION_SUCCESSFULLY
-    ], ApiStatusCodeEnum::NO_CONTENT);
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_REMOVED_FROM_ORGANIZATION_SUCCESSFULLY,
+      ApiStatusCodeEnum::SUCCESS
+    );
   }
 
   public function updateEmail(UpdateUserEmailRequest $request, int $id): JsonResponse
   {
     $success = $this->updateUserEmailUseCase->execute($id, $request->email);
     if (!$success) {
-      return response()->json([
-        'message' => ApiMessageEnum::USER_NOT_FOUND
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
-    return response()->json([
-      'message' => ApiMessageEnum::USER_EMAIL_UPDATED_SUCCESSFULLY
-    ], ApiStatusCodeEnum::SUCCESS);
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_EMAIL_UPDATED_SUCCESSFULLY,
+      ApiStatusCodeEnum::SUCCESS
+    );
   }
 
   public function updatePassword(UpdateUserPasswordRequest $request, int $id): JsonResponse
   {
     $success = $this->updateUserPasswordUseCase->execute($id, $request->password);
     if (!$success) {
-      return response()->json([
-        'message' => ApiMessageEnum::USER_NOT_FOUND
-      ], ApiStatusCodeEnum::NOT_FOUND);
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
     }
-    return response()->json([
-      'message' => ApiMessageEnum::USER_PASSWORD_UPDATED_SUCCESSFULLY
-    ], ApiStatusCodeEnum::SUCCESS);
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_PASSWORD_UPDATED_SUCCESSFULLY,
+      ApiStatusCodeEnum::SUCCESS
+    );
   }
 }

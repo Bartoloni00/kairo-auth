@@ -5,14 +5,16 @@ namespace App\Modules\Users\Interfaces\Http\Middlewares;
 use Closure;
 use Illuminate\Http\Request;
 use App\Modules\Users\Interfaces\Http\Middlewares\Traits\HasAuthorizationHelpers;
+use App\Shared\Interfaces\Http\Responses\ApiResponse;
 use App\Shared\Helpers\Enums\{
     ApiMessageEnum,
-    ApiStatusCodeEnum
+    ApiStatusCodeEnum,
+    ApiErrorCodeEnum
 };
 
 class CanManageOrganization
 {
-    use HasAuthorizationHelpers;
+    use HasAuthorizationHelpers, ApiResponse;
 
     /**
      * Rules:
@@ -26,10 +28,9 @@ class CanManageOrganization
         $organizationId = $request->route('id');
 
         if (!$authUser) {
-            return response()->json(
-                [
-                    'message' => ApiMessageEnum::UNAUTHORIZED_MESSAGE
-                ],
+            return $this->errorResponse(
+                ApiMessageEnum::UNAUTHORIZED_MESSAGE,
+                ApiErrorCodeEnum::AUTH_FAILED->value,
                 ApiStatusCodeEnum::UNAUTHORIZED
             );
         }
@@ -42,10 +43,9 @@ class CanManageOrganization
             return $next($request);
         }
 
-        return response()->json(
-            [
-                'message' => ApiMessageEnum::FORBIDDEN_MESSAGE
-            ],
+        return $this->errorResponse(
+            ApiMessageEnum::FORBIDDEN_MESSAGE,
+            ApiErrorCodeEnum::FORBIDDEN->value,
             ApiStatusCodeEnum::FORBIDDEN
         );
     }
