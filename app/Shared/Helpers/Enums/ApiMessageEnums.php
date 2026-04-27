@@ -5,6 +5,7 @@ namespace App\Shared\Helpers\Enums;
 enum ApiMessageEnum: string
 {
   public const UNAUTHORIZED_MESSAGE = 'No tienes permiso para realizar esta acción';
+  public const FORBIDDEN_MESSAGE = 'Acción no permitida';
   public const INVALID_REQUEST = 'Solicitud inválida';
   public const TOKEN_EXPIRED = 'Token expirado';
   public const TOKEN_INVALID = 'Token inválido';

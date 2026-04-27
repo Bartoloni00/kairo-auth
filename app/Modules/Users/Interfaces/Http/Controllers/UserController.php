@@ -140,8 +140,12 @@ class UserController
   {
     $success = $this->updateUserPasswordUseCase->execute($id, $request->password);
     if (!$success) {
-      return response()->json(['message' => 'User not found or update failed'], 404);
+      return response()->json([
+        'message' => ApiMessageEnum::USER_NOT_FOUND
+      ], ApiStatusCodeEnum::NOT_FOUND);
     }
-    return response()->json(['message' => 'User password updated successfully']);
+    return response()->json([
+      'message' => ApiMessageEnum::USER_PASSWORD_UPDATED_SUCCESSFULLY
+    ], ApiStatusCodeEnum::SUCCESS);
   }
 }

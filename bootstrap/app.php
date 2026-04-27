@@ -21,6 +21,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'jwt' => App\Modules\Auth\Interfaces\Http\Middlewares\JwtMiddleware::class,
+            'can.view.users' => \App\Modules\Users\Interfaces\Http\Middlewares\CanViewUsers::class,
+            'can.manage.user' => \App\Modules\Users\Interfaces\Http\Middlewares\CanManageUser::class,
+            'can.delete.user' => \App\Modules\Users\Interfaces\Http\Middlewares\CanDeleteUser::class,
+            'is.root' => \App\Modules\Users\Interfaces\Http\Middlewares\IsRoot::class,
+            'can.manage.project' => \App\Modules\Users\Interfaces\Http\Middlewares\CanManageProject::class,
+            'can.manage.organization' => \App\Modules\Users\Interfaces\Http\Middlewares\CanManageOrganization::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

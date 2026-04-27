@@ -76,22 +76,8 @@ class User extends Authenticatable
         return array_values($grouped);
     }
 
-    public function authorizeAccess(string $organization_id, string $project_id, $role): bool
+    public function isSameOrganization(User $user): bool
     {
-        if ($this->is_root) {
-            return true;
-        }
-
-        /*
-        ROOT tiene acceso a todo
-        Admin tiene acceso a todo dentro de su organizacion
-
-
-        */
-        return $this->access()->whereHas('role', function ($query) use ($organization_id, $project_id, $role) {
-            $query->where(' organization_id', $organization_id)
-                ->where('project_id', $project_id)
-                ->where('role', $role);
-        })->exists();
+        return $this->organization_id === $user->organization_id;
     }
 }
