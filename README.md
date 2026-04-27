@@ -1,360 +1,88 @@
-# Auth service proyect
+# 🧠 Kairo Auth Core Platform
 
-# 🧠 Auth Core Platform (Multi-tenant SaaS Identity & Licensing)
+### Multi-tenant SaaS Identity & Licensing Service
 
-## 📌 Overview
-
-Sistema centralizado de autenticación, organizaciones (tenants), acceso a proyectos y licenciamiento, diseñado para reutilizarse en múltiples aplicaciones SaaS.
-
-### Objetivos
-
-- Evitar duplicación de usuarios entre apps
-- Centralizar autenticación y autorización
-- Soportar multitenancy (organizaciones con equipos)
-- Gestionar licencias por organización
-- Acelerar desarrollo de nuevos SaaS
+Kairo Auth es un microservicio de autenticación y autorización centralizado, diseñado para gestionar identidades, organizaciones (tenants), proyectos y licencias en un ecosistema de aplicaciones SaaS.
 
 ---
 
-# 🧱 Arquitectura
+## 🏗️ Arquitectura y Hitos de Diseño
 
-## 🧩 Estilo
+El proyecto implementa una arquitectura robusta basada en estándares modernos para asegurar escalabilidad y mantenibilidad:
 
-- Monolito modular
-- Clean Architecture (capas desacopladas)
+### 🧩 Monolito Modular
 
-## 📂 Estructura
+El sistema está organizado en **Módulos Independientes** (Auth, Users, Organizations, Projects, etc.). Cada módulo encapsula su propia lógica de dominio, controladores y rutas, facilitando una futura transición a microservicios si fuera necesario.
 
-(Sin definir)
+### 🏛️ Clean Architecture & DDD
 
----
+Se sigue un patrón de **Arquitectura Limpia** para separar las preocupaciones:
 
-# 🏢 Modelo de dominio
+- **Domain**: Entidades y reglas de negocio puras.
+- **Application**: Casos de uso (Use Cases) que orquestan la lógica.
+- **Infrastructure**: Implementaciones de persistencia, servicios externos y adaptadores.
+- **Interfaces**: Controladores API, Middlewares y Requests.
 
-## Entidades principales
+### 🔐 Autorización Granular y Multi-tenant
 
-- User (global)
-- Organization (tenant)
-- Project
-- License
-- Invitation
-- AuditLog
+A diferencia de los sistemas de roles tradicionales, Kairo Auth utiliza un sistema de **Middlewares por Acción** con soporte multi-tenant nativo:
 
----
+- **Relación Dinámica**: Los permisos se definen en una tabla pivote `project_user_access` que vincula Usuario + Proyecto + Organización + Rol.
+- **Fail-Closed**: El sistema deniega cualquier acceso por defecto a menos que exista una regla explícita que lo permita.
+- **Bypass de ROOT**: Soporte para un rol Super Admin (Root) que permite la gestión global del ecosistema.
 
-# 🗄️ Base de Datos
-![base de datos](/database/DER-01.png)
-# 🔐 Autenticación
+### 📜 Sistema de Auditoría (Audit Logs)
 
-## JWT Strategy
-
-### Access Token
-
-- corto (15–30 min)
-
-### Refresh Token
-
-- largo (7–30 días)
-- almacenado en DB
+Cada acción crítica (creación, edición, eliminación, login) se registra automáticamente en una tabla de auditoría, capturando metadatos como IP, headers, cuerpo de la petición y estado de la operación.
 
 ---
 
-## Payload JWT
+## 🚀 Características Principales
 
-```
-{
-  "sub":"user_id",
-  "org_id":"org_id",
-  "role":"admin",
-  "iat":1710000000,
-  "exp":1710003600
-}
+- **JWT Auth**: Autenticación segura mediante JSON Web Tokens con soporte para Access y Refresh Tokens.
+- **Multi-tenancy**: Gestión de múltiples organizaciones donde un usuario puede tener diferentes roles en cada una.
+- **RBAC Extensible**: Roles jerárquicos (ROOT, ADMIN, USER) preparados para extensiones futuras.
+- **Documentación Viva**:
+    - **Swagger/OpenAPI**: Documentación interactiva generada desde el código.
+    - **Postman**: Colección lista para importar y probar el flujo completo.
+
+---
+
+## 📂 Estructura del Proyecto
+
+```text
+app/
+├── Modules/             # Módulos del sistema (Auth, Users, Projects, etc.)
+│   └── [Module]/
+│       ├── Domain/      # Entidades y Contratos
+│       ├── Application/ # Casos de Uso
+│       └── Interfaces/  # Controladores, Rutas y Middlewares
+├── Shared/              # Helpers, Enums y lógica compartida
+└── Docs/                # Documentación detallada y esquemas
 ```
 
 ---
 
-## Refresh Tokens (tabla sugerida)
+## 🛠️ Instalación y Configuración
 
-```
-refresh_tokens
-- id
-- user_id
-- token (hash)
-- expires_at
-- revoked (bool)
-```
+Consulta el archivo [INSTALL.md](./INSTALL.md) para ver los pasos detallados de despliegue en local.
 
 ---
 
-# 🔄 Flujo de autenticación
+## 📖 Documentación Adicional
 
-## Registro
-
-1. Usuario envía email/password + project_id
-2. Backend:
-    - busca user por email
-    - si no existe → crea
-3. crea organization (si es nuevo)
-4. vincula project a organization
-5. asigna rol admin
+- [Sistema de Autorización](./app/Docs/AUTHORIZATION_MIDDLEWARE.md)
+- [Guía de Logs de Auditoría](./app/Docs/LOGS_GUIDE.md)
+- [Uso de Factories](./app/Docs/FACTORIES_GUIDE.md)
 
 ---
 
-## Login
-
-1. valida credenciales
-2. devuelve:
-    - access_token
-    - refresh_token
-
----
-
-## Refresh
-
-1. valida refresh_token
-2. genera nuevo access_token
-
----
-
-# 🧩 Endpoints
-
-## Auth
-
-### POST /auth/register
-
-```
-{
-  "email":"",
-  "password":"",
-  "project_id":""
-}
-```
-
----
-
-### POST /auth/login
-
-```
-{
-  "email":"",
-  "password":""
-}
-```
-
----
-
-### POST /auth/refresh
-
-```
-{
-  "refresh_token":""
-}
-```
-
----
-
-### POST /auth/logout
-
-- revoca refresh token
-
----
-
-## Organizations
-
-### GET /organizations
-
-- lista organizaciones del usuario
-
-### POST /organizations
-
-- crear nueva org
-
----
-
-## Organization Users
-
-### GET /organizations/{id}/users
-
-### POST /organizations/{id}/invite
-
-```
-{
-  "email":"",
-  "role":"member"
-}
-```
-
----
-
-### POST /invitations/accept
-
-```
-{
-  "token":"",
-  "password":""
-}
-```
-
----
-
-## Projects
-
-### GET /projects
-
-### POST /organizations/{id}/projects/enable
-
-```
-{
-  "project_id":""
-}
-```
-
----
-
-## Licenses
-
-### GET /organizations/{id}/license
-
-### POST /organizations/{id}/license
-
-```
-{
-  "plan":"pro"
-}
-```
-
----
-
-# 🛡️ Middlewares
-
-## 1. AuthMiddleware
-
-- valida JWT
-
----
-
-## 2. OrganizationMiddleware
-
-- valida que user pertenece a org
-
----
-
-## 3. ProjectAccessMiddleware
-
-- valida:
-    - org tiene project habilitado
-    - licencia activa
-
-Headers requeridos:
-
-```
-Authorization: Bearer xxx
-X-Org-ID: org_id
-X-Project-ID: project_id
-```
-
----
-
-## 4. RoleMiddleware
-
-- valida roles:
-    - admin
-    - member
-
----
-
-## 5. LicenseMiddleware
-
-- valida plan activo
-
----
-
-# 📩 Sistema de invitaciones
-
-## Flujo
-
-1. Admin invita usuario
-2. se genera token único
-3. se envía email
-4. usuario acepta:
-    - crea cuenta o vincula existente
-    - se agrega a organization
-
----
-
-# 📜 Logs (Audit System)
-
-Registrar:
-
-- login
-- registro
-- creación de org
-- invitaciones
-- cambios de rol
-- cambios de licencia
-
----
-
-# 💳 Licencias
-
-## MVP
-
-Planes:
-
-- free → acceso limitado
-- pro → acceso a todos los proyectos
-
----
-
-## Reglas
-
-- licencia por organización
-- validar en cada request crítica
-
----
-
-# 🧠 SDK (futuro)
-
-Funciones:
-
-```
-auth.login()
-auth.logout()
-auth.getUser()
-auth.getOrganizations()
-auth.hasAccess(projectId)
-```
-
----
-
-# 🚀 Roadmap
-
-## Fase 1
-
-- auth básico
-- organizations
-
-## Fase 2
-
-- projects + acceso
-
-## Fase 3
-
-- licencias
-
-## Fase 4
-
-- invitaciones
-
-## Fase 5
-
-- logs + SDK
-
----
-
-# ⚠️ Consideraciones clave
-
-- no sobrecargar JWT
-- mantener lógica de permisos en backend
-- separar identidad de acceso
-- diseñar todo pensando en organización como unidad principal
+## 🎯 Roadmap Architectural
+
+- [x] Implementación de JWT (Tymon)
+- [x] Arquitectura Modular Monolith
+- [x] Sistema de Permisos Multi-tenant Granular
+- [x] Logs de Auditoría Automatizados
+- [ ] Implementación de SDK para aplicaciones satélite
+- [ ] Sistema de Invitaciones por Email
+- [ ] Gestión de Suscripciones y Planes de Pago (ver servicios de pagos online)
