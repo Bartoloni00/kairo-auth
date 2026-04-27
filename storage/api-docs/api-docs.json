@@ -117,6 +117,29 @@
             }
         },
         "/api/organizations": {
+            "get": {
+                "tags": [
+                    "Organizaciones"
+                ],
+                "summary": "Listar organizaciones",
+                "operationId": "listOrganizations",
+                "responses": {
+                    "200": {
+                        "description": "Lista de organizaciones"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Organizaciones"
@@ -147,6 +170,9 @@
                     },
                     "422": {
                         "description": "Datos inválidos"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -179,6 +205,9 @@
                     },
                     "404": {
                         "description": "Organización no encontrada"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -223,6 +252,9 @@
                     },
                     "404": {
                         "description": "Organización no encontrada"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -263,6 +295,29 @@
             }
         },
         "/api/projects": {
+            "get": {
+                "tags": [
+                    "Proyectos"
+                ],
+                "summary": "Listar proyectos",
+                "operationId": "listProjects",
+                "responses": {
+                    "200": {
+                        "description": "Lista de proyectos"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Proyectos"
@@ -296,6 +351,9 @@
                     },
                     "422": {
                         "description": "Datos inválidos"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -328,6 +386,9 @@
                     },
                     "404": {
                         "description": "Proyecto no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -375,6 +436,9 @@
                     },
                     "404": {
                         "description": "Proyecto no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -405,6 +469,9 @@
                     },
                     "404": {
                         "description": "Proyecto no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -453,6 +520,9 @@
                     },
                     "401": {
                         "description": "No autenticado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -485,6 +555,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -515,6 +588,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -566,6 +642,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -617,6 +696,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -657,6 +739,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado o no está en el proyecto"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -697,6 +782,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado o no está en la organización"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -744,6 +832,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [
@@ -791,6 +882,9 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado"
+                    },
+                    "403": {
+                        "description": "Prohibido - No tienes permisos"
                     }
                 },
                 "security": [

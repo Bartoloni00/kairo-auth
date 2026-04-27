@@ -6,6 +6,18 @@ use OpenApi\Attributes as OA;
 
 class ProjectControllerDoc
 {
+    #[OA\Get(
+        path: "/api/projects",
+        summary: "Listar proyectos",
+        operationId: "listProjects",
+        tags: ["Proyectos"],
+        security: [["bearerAuth" => []]],
+        responses: [
+            new OA\Response(response: 200, description: "Lista de proyectos"),
+            new OA\Response(response: 401, description: "No autenticado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
+        ]
+    )]
     public function index() {}
 
     #[OA\Post(
@@ -26,7 +38,8 @@ class ProjectControllerDoc
         ),
         responses: [
             new OA\Response(response: 201, description: "Proyecto creado"),
-            new OA\Response(response: 422, description: "Datos inválidos")
+            new OA\Response(response: 422, description: "Datos inválidos"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function store() {}
@@ -42,7 +55,8 @@ class ProjectControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Proyecto encontrado"),
-            new OA\Response(response: 404, description: "Proyecto no encontrado")
+            new OA\Response(response: 404, description: "Proyecto no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function show() {}
@@ -66,7 +80,8 @@ class ProjectControllerDoc
         ),
         responses: [
             new OA\Response(response: 200, description: "Proyecto actualizado"),
-            new OA\Response(response: 404, description: "Proyecto no encontrado")
+            new OA\Response(response: 404, description: "Proyecto no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function update() {}
@@ -82,7 +97,8 @@ class ProjectControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Proyecto eliminado"),
-            new OA\Response(response: 404, description: "Proyecto no encontrado")
+            new OA\Response(response: 404, description: "Proyecto no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function destroy() {}

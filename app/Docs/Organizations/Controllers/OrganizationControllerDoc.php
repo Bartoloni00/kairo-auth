@@ -6,6 +6,18 @@ use OpenApi\Attributes as OA;
 
 class OrganizationControllerDoc
 {
+    #[OA\Get(
+        path: "/api/organizations",
+        summary: "Listar organizaciones",
+        operationId: "listOrganizations",
+        tags: ["Organizaciones"],
+        security: [["bearerAuth" => []]],
+        responses: [
+            new OA\Response(response: 200, description: "Lista de organizaciones"),
+            new OA\Response(response: 401, description: "No autenticado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
+        ]
+    )]
     public function index() {}
 
     #[OA\Post(
@@ -25,7 +37,8 @@ class OrganizationControllerDoc
         ),
         responses: [
             new OA\Response(response: 201, description: "Organización creada"),
-            new OA\Response(response: 422, description: "Datos inválidos")
+            new OA\Response(response: 422, description: "Datos inválidos"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function store() {}
@@ -41,7 +54,8 @@ class OrganizationControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Organización encontrada"),
-            new OA\Response(response: 404, description: "Organización no encontrada")
+            new OA\Response(response: 404, description: "Organización no encontrada"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function show() {}
@@ -64,7 +78,8 @@ class OrganizationControllerDoc
         ),
         responses: [
             new OA\Response(response: 200, description: "Organización actualizada"),
-            new OA\Response(response: 404, description: "Organización no encontrada")
+            new OA\Response(response: 404, description: "Organización no encontrada"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function update() {}

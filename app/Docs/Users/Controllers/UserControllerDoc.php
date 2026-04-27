@@ -19,7 +19,8 @@ class UserControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Lista de usuarios"),
-            new OA\Response(response: 401, description: "No autenticado")
+            new OA\Response(response: 401, description: "No autenticado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function index() {}
@@ -35,7 +36,8 @@ class UserControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Usuario encontrado"),
-            new OA\Response(response: 404, description: "Usuario no encontrado")
+            new OA\Response(response: 404, description: "Usuario no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function show() {}
@@ -59,7 +61,8 @@ class UserControllerDoc
         ),
         responses: [
             new OA\Response(response: 200, description: "Usuario agregado al proyecto"),
-            new OA\Response(response: 404, description: "Usuario no encontrado")
+            new OA\Response(response: 404, description: "Usuario no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function addToProject() {}
@@ -83,7 +86,8 @@ class UserControllerDoc
         ),
         responses: [
             new OA\Response(response: 200, description: "Usuario agregado a la organización"),
-            new OA\Response(response: 404, description: "Usuario no encontrado")
+            new OA\Response(response: 404, description: "Usuario no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function addToOrganization() {}
@@ -100,7 +104,8 @@ class UserControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Usuario eliminado del proyecto"),
-            new OA\Response(response: 404, description: "Usuario no encontrado o no está en el proyecto")
+            new OA\Response(response: 404, description: "Usuario no encontrado o no está en el proyecto"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function removeFromProject() {}
@@ -117,7 +122,8 @@ class UserControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Usuario eliminado de la organización"),
-            new OA\Response(response: 404, description: "Usuario no encontrado o no está en la organización")
+            new OA\Response(response: 404, description: "Usuario no encontrado o no está en la organización"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function removeFromOrganization() {}
@@ -140,7 +146,8 @@ class UserControllerDoc
         ),
         responses: [
             new OA\Response(response: 200, description: "Email actualizado"),
-            new OA\Response(response: 404, description: "Usuario no encontrado")
+            new OA\Response(response: 404, description: "Usuario no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function updateEmail() {}
@@ -163,7 +170,8 @@ class UserControllerDoc
         ),
         responses: [
             new OA\Response(response: 200, description: "Contraseña actualizada"),
-            new OA\Response(response: 404, description: "Usuario no encontrado")
+            new OA\Response(response: 404, description: "Usuario no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function updatePassword() {}
@@ -179,7 +187,8 @@ class UserControllerDoc
         ],
         responses: [
             new OA\Response(response: 200, description: "Usuario eliminado"),
-            new OA\Response(response: 404, description: "Usuario no encontrado")
+            new OA\Response(response: 404, description: "Usuario no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
         ]
     )]
     public function destroy() {}

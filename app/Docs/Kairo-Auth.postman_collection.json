@@ -234,7 +234,7 @@
 					"response": []
 				},
 				{
-					"name": "Update User",
+					"name": "Update User Email",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -256,7 +256,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"updated@example.com\",\n    \"access\": [\n        {\n            \"project_id\": 1,\n            \"organization_id\": 1,\n            \"role_id\": 1\n        }\n    ]\n}",
+							"raw": "{\n    \"email\": \"updated@example.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -264,13 +264,146 @@
 							}
 						},
 						"url": {
-							"raw": "{{API}}/users/1",
+							"raw": "{{API}}/users/1/email",
 							"host": [
 								"{{API}}"
 							],
 							"path": [
 								"users",
-								"1"
+								"1",
+								"email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"newpassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API}}/users/1/password",
+							"host": [
+								"{{API}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User to Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"project_id\": 1,\n    \"role_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API}}/users/1/projects",
+							"host": [
+								"{{API}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User to Organization",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"organization_id\": 1,\n    \"role_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API}}/users/1/organizations",
+							"host": [
+								"{{API}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"organizations"
 							]
 						}
 					},
