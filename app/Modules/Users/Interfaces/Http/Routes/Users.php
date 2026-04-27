@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Modules\Users\Interfaces\Http\Controllers\UserController;
 
-Route::prefix('users')->middleware('jwt')->group(function () {
+Route::prefix('users')->middleware(['jwt', 'throttle:api'])->group(function () {
     /*
     - Root: puede ver a todos los usuarios
     - pueden ver usuarios de su misma organizacion y de las organizaciones que tiene acceso
@@ -39,10 +39,10 @@ Route::prefix('users')->middleware('jwt')->group(function () {
         ->whereNumber('organization_id');
 
     Route::put('/{user_id}/email', [UserController::class, 'updateEmail'])
-        ->middleware('can.manage.user')
+        ->middleware(['can.manage.user', 'throttle:sensitive'])
         ->whereNumber('user_id');
 
     Route::put('/{user_id}/password', [UserController::class, 'updatePassword'])
-        ->middleware('can.manage.user')
+        ->middleware(['can.manage.user', 'throttle:sensitive'])
         ->whereNumber('user_id');
 });

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Projects\Interfaces\Http\Controllers\ProjectController;
 
-Route::prefix('projects')->middleware('jwt')->group(function () {
+Route::prefix('projects')->middleware(['jwt', 'throttle:api'])->group(function () {
     Route::get('/', [ProjectController::class, 'index'])
         ->middleware('is.root');
 

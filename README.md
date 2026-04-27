@@ -40,6 +40,7 @@ Cada acción crítica (creación, edición, eliminación, login) se registra aut
 ## 🚀 Características Principales
 
 - **JWT Auth**: Autenticación segura mediante JSON Web Tokens con soporte para Access y Refresh Tokens.
+- **Rate Limiting**: Protección contra fuerza bruta y abuso mediante limitadores específicos (`login`, `register`, `api`, `sensitive`).
 - **Multi-tenancy**: Gestión de múltiples organizaciones donde un usuario puede tener diferentes roles en cada una.
 - **RBAC Extensible**: Roles jerárquicos (ROOT, ADMIN, USER) preparados para extensiones futuras.
 - **Documentación Viva**:
@@ -74,6 +75,7 @@ Consulta el archivo [INSTALL.md](./INSTALL.md) para ver los pasos detallados de 
 - [Sistema de Autorización](./app/Docs/AUTHORIZATION_MIDDLEWARE.md)
 - [Guía de Logs de Auditoría](./app/Docs/LOGS_GUIDE.md)
 - [Patrón de Respuestas API](./app/Docs/API_RESPONSE_PATTERN.md)
+- [Sistema de Rate Limiting](./app/Docs/RATE_LIMITING.md)
 - [Uso de Factories](./app/Docs/FACTORIES_GUIDE.md)
 
 ---
@@ -83,6 +85,7 @@ Consulta el archivo [INSTALL.md](./INSTALL.md) para ver los pasos detallados de 
 - [x] Implementación de JWT (Tymon)
 - [x] Arquitectura Modular Monolith
 - [x] Patrón Unificado de Respuestas API
+- [x] Sistema de Rate Limiting (Brute-force protection)
 - [x] Sistema de Permisos Multi-tenant Granular
 - [x] Logs de Auditoría Automatizados
 - [ ] Implementación de SDK para aplicaciones satélite

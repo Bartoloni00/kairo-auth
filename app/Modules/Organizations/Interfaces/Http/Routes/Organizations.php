@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Organizations\Interfaces\Http\Controllers\OrganizationController;
 
-Route::prefix('organizations')->middleware('jwt')->group(function () {
+Route::prefix('organizations')->middleware(['jwt', 'throttle:api'])->group(function () {
     Route::get('/', [OrganizationController::class, 'index'])
         ->middleware('is.root');
 
