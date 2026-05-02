@@ -16,6 +16,8 @@ interface UserRepositoryInterface
   public function addToOrganization(int $userId, int $organizationId, ?int $roleId = null): bool;
   public function removeFromProject(int $userId, int $projectId): bool;
   public function removeFromOrganization(int $userId, int $organizationId): bool;
+  public function updateProjectRole(int $userId, int $projectId, int $roleId): bool;
+  public function updateOrganizationRole(int $userId, int $organizationId, int $roleId): bool;
   public function updateEmail(int $userId, string $email): bool;
   public function updatePassword(int $userId, string $password): bool;
 }

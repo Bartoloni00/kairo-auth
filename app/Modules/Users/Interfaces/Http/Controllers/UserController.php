@@ -11,13 +11,17 @@ use App\Modules\Users\Application\UseCases\{
   RemoveUserFromProjectUseCase,
   RemoveUserFromOrganizationUseCase,
   UpdateUserEmailUseCase,
-  UpdateUserPasswordUseCase
+  UpdateUserPasswordUseCase,
+  UpdateUserProjectRoleUseCase,
+  UpdateUserOrganizationRoleUseCase
 };
 use App\Modules\Users\Application\Requests\{
   AddUserToProjectRequest,
   AddUserToOrganizationRequest,
   UpdateUserEmailRequest,
-  UpdateUserPasswordRequest
+  UpdateUserPasswordRequest,
+  UpdateUserProjectRoleRequest,
+  UpdateUserOrganizationRoleRequest
 };
 use App\Shared\Interfaces\Http\Responses\ApiResponse;
 use App\Shared\Helpers\Enums\{
@@ -41,7 +45,9 @@ class UserController
     private readonly RemoveUserFromProjectUseCase $removeUserFromProjectUseCase,
     private readonly RemoveUserFromOrganizationUseCase $removeUserFromOrganizationUseCase,
     private readonly UpdateUserEmailUseCase $updateUserEmailUseCase,
-    private readonly UpdateUserPasswordUseCase $updateUserPasswordUseCase
+    private readonly UpdateUserPasswordUseCase $updateUserPasswordUseCase,
+    private readonly UpdateUserProjectRoleUseCase $updateUserProjectRoleUseCase,
+    private readonly UpdateUserOrganizationRoleUseCase $updateUserOrganizationRoleUseCase
   ) {}
 
   public function index(Request $request): JsonResponse
@@ -179,6 +185,40 @@ class UserController
     return $this->successResponse(
       null,
       ApiMessageEnum::USER_PASSWORD_UPDATED_SUCCESSFULLY,
+      ApiStatusCodeEnum::SUCCESS
+    );
+  }
+
+  public function updateProjectRole(UpdateUserProjectRoleRequest $request, int $user_id, int $project_id): JsonResponse
+  {
+    $success = $this->updateUserProjectRoleUseCase->execute($user_id, $project_id, $request->role_id);
+    if (!$success) {
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
+    }
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_ROLE_UPDATED_SUCCESSFULLY,
+      ApiStatusCodeEnum::SUCCESS
+    );
+  }
+
+  public function updateOrganizationRole(UpdateUserOrganizationRoleRequest $request, int $user_id, int $organization_id): JsonResponse
+  {
+    $success = $this->updateUserOrganizationRoleUseCase->execute($user_id, $organization_id, $request->role_id);
+    if (!$success) {
+      return $this->errorResponse(
+        ApiMessageEnum::USER_NOT_FOUND,
+        ApiErrorCodeEnum::NOT_FOUND->value,
+        ApiStatusCodeEnum::NOT_FOUND
+      );
+    }
+    return $this->successResponse(
+      null,
+      ApiMessageEnum::USER_ROLE_UPDATED_SUCCESSFULLY,
       ApiStatusCodeEnum::SUCCESS
     );
   }

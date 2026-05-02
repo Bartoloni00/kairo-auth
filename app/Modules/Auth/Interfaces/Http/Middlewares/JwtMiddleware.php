@@ -76,7 +76,7 @@ class JwtMiddleware
       );
     }
 
-    $request->attributes->set('user', $user);
+    $request->setUserResolver(fn() => $user);
 
     return $next($request);
   }

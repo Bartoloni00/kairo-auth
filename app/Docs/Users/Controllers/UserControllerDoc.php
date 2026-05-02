@@ -152,6 +152,56 @@ class UserControllerDoc
     )]
     public function removeFromOrganization() {}
 
+    #[OA\Patch(
+        path: "/api/users/{id}/projects/{projectId}/role",
+        summary: "Actualizar rol de usuario en un proyecto",
+        operationId: "updateUserProjectRole",
+        tags: ["Usuarios"],
+        security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+            new OA\Parameter(name: "projectId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "role_id", type: "integer", example: 1)
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Rol actualizado en el proyecto"),
+            new OA\Response(response: 404, description: "Usuario o proyecto no encontrado"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
+        ]
+    )]
+    public function updateProjectRole() {}
+
+    #[OA\Patch(
+        path: "/api/users/{id}/organizations/{organizationId}/role",
+        summary: "Actualizar rol de usuario en una organización",
+        operationId: "updateUserOrganizationRole",
+        tags: ["Usuarios"],
+        security: [["bearerAuth" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+            new OA\Parameter(name: "organizationId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "role_id", type: "integer", example: 1)
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Rol actualizado en la organización"),
+            new OA\Response(response: 404, description: "Usuario u organización no encontrada"),
+            new OA\Response(response: 403, description: "Prohibido - No tienes permisos")
+        ]
+    )]
+    public function updateOrganizationRole() {}
+
     #[OA\Put(
         path: "/api/users/{id}/email",
         summary: "Actualizar email de usuario",

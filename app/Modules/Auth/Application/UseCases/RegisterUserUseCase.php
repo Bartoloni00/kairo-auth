@@ -21,19 +21,14 @@ class RegisterUserUseCase
         'password' => \Illuminate\Support\Facades\Hash::make($data['password']),
       ]);
 
-      throw_if(
-        !isset($data['project_id']) ||
-          !isset($data['organization_id']) ||
-          !isset($data['role_id']),
-        new \Exception('Proyecto, organización y rol son obligatorios.')
-      );
-
-      $this->projectUserRepository->create([
-        'user_id' => $user->id,
-        'project_id' => $data['project_id'],
-        'role_id' => $data['role_id'],
-        'organization_id' => $data['organization_id'],
-      ]);
+      if (isset($data['project_id'], $data['organization_id'], $data['role_id'])) {
+        $this->projectUserRepository->create([
+          'user_id' => $user->id,
+          'project_id' => $data['project_id'],
+          'role_id' => $data['role_id'],
+          'organization_id' => $data['organization_id'],
+        ]);
+      }
 
       return $user;
     });

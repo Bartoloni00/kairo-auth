@@ -142,6 +142,22 @@ class UserRepository implements UserRepositoryInterface
     return $user->access()->where('organization_id', $organizationId)->delete() > 0;
   }
 
+  public function updateProjectRole(int $userId, int $projectId, int $roleId): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    return $user->access()->where('project_id', $projectId)->update(['role_id' => $roleId]) > 0;
+  }
+
+  public function updateOrganizationRole(int $userId, int $organizationId, int $roleId): bool
+  {
+    $user = User::find($userId);
+    if (!$user) return false;
+
+    return $user->access()->where('organization_id', $organizationId)->update(['role_id' => $roleId]) > 0;
+  }
+
   public function updateEmail(int $userId, string $email): bool
   {
     $user = User::find($userId);

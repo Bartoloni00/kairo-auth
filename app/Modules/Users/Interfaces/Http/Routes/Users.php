@@ -38,6 +38,16 @@ Route::prefix('users')->middleware(['jwt', 'throttle:api'])->group(function () {
         ->whereNumber('user_id')
         ->whereNumber('organization_id');
 
+    Route::patch('/{user_id}/projects/{project_id}/role', [UserController::class, 'updateProjectRole'])
+        ->middleware('can.manage.user')
+        ->whereNumber('user_id')
+        ->whereNumber('project_id');
+
+    Route::patch('/{user_id}/organizations/{organization_id}/role', [UserController::class, 'updateOrganizationRole'])
+        ->middleware('can.manage.user')
+        ->whereNumber('user_id')
+        ->whereNumber('organization_id');
+
     Route::put('/{user_id}/email', [UserController::class, 'updateEmail'])
         ->middleware(['can.manage.user', 'throttle:sensitive'])
         ->whereNumber('user_id');

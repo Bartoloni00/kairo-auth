@@ -25,4 +25,5 @@ enum ApiMessageEnum: string
   public const USER_REMOVED_FROM_ORGANIZATION_SUCCESSFULLY = 'Usuario eliminado de la organización exitosamente';
   public const USER_EMAIL_UPDATED_SUCCESSFULLY = 'Email del usuario actualizado exitosamente';
   public const USER_PASSWORD_UPDATED_SUCCESSFULLY = 'Contraseña del usuario actualizada exitosamente';
+  public const USER_ROLE_UPDATED_SUCCESSFULLY = 'Rol del usuario actualizado exitosamente';
 }

@@ -16,9 +16,9 @@ class RegisterUserRequest extends FormRequest
     return [
       'email' => 'required|string|email|unique:users,email,NULL,id,deleted_at,NULL',
       'password' => 'required|string|min:6',
-      'project_id' => 'integer|exists:projects,id',
-      'role_id' => 'required_with:project_id|integer|exists:roles,id',
-      'organization_id' => 'required_with:project_id|integer|exists:organizations,id',
+      'project_id' => 'nullable|integer|exists:projects,id',
+      'role_id' => 'nullable|integer|exists:roles,id',
+      'organization_id' => 'nullable|integer|exists:organizations,id',
     ];
   }
 
