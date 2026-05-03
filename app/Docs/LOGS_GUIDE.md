@@ -1,24 +1,37 @@
-cada accion en el sistema registrara un log en la tabla audit_logs
+# Sistema de Logs y Auditoría
 
-la estructura de la tabla es la siguiente:
+Cada acción relevante en el sistema registra un log tanto en los archivos estándar de Laravel como en la tabla `audit_logs` de la base de datos.
 
-- ID del usuario
-- Horario
-- Accion
-    - Agregado exitoso
-    - Eliminacion exitosa
-    - Actualizacion exitosa
-    - Fallo eliminado
-    - Fallo agregado
-    - Fallo actualizacion
+## Estructura de la Tabla `audit_logs`
 
-    - Login exitoso
-    - Fallo de login
+- **user_id**: ID del usuario que realizó la acción.
+- **action**: Nombre de la acción (ej: `user_registered`, `login_failed`).
+- **metadata**: JSON con información detallada del request.
+- **created_at**: Fecha y hora del evento.
 
-- Metada {
-  endpoint,
-  IP (existe un helper llamado requestIP()),
-  request_headers (existe un helper llamado requestHeaders()),
-  request_params (existe un helper llamado requestParams()),
-  request_body (existe un helper llamado requestBody()),
-  }
+## Metadatos Automáticos
+Cada log incluye automáticamente:
+- `endpoint`: URL completa del request.
+- `method`: Método HTTP (GET, POST, etc).
+- `ip`: IP del cliente (vía helper `requestIP()`).
+- `headers`: Headers del request (vía helper `requestHeaders()`).
+- `params`: Parámetros de la query string (vía helper `requestParams()`).
+- `body`: Cuerpo del request (vía helper `requestBody()`).
+
+## Endpoint de Consulta
+
+**GET `/audit-logs`** (Solo para usuarios con rol `is.root`)
+
+### Filtros Disponibles:
+- `user_id`: Filtrar por un usuario específico.
+- `action`: Búsqueda parcial por nombre de acción.
+- `date_from`: Fecha de inicio (YYYY-MM-DD).
+- `date_to`: Fecha de fin (YYYY-MM-DD).
+- `search`: Búsqueda de texto en acción y metadatos.
+
+## Uso del Servicio
+Para registrar logs desde cualquier controlador, inyectar `AuditLogService`:
+
+```php
+$this->auditLogService->info('mi_accion_personalizada', ['dato' => 'extra']);
+```

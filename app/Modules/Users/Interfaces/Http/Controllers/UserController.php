@@ -29,8 +29,10 @@ use App\Shared\Helpers\Enums\{
   ApiMessageEnum,
   ApiErrorCodeEnum
 };
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Modules\Auditlogs\Application\Services\AuditLogService;
 
 class UserController
 {
@@ -47,7 +49,8 @@ class UserController
     private readonly UpdateUserEmailUseCase $updateUserEmailUseCase,
     private readonly UpdateUserPasswordUseCase $updateUserPasswordUseCase,
     private readonly UpdateUserProjectRoleUseCase $updateUserProjectRoleUseCase,
-    private readonly UpdateUserOrganizationRoleUseCase $updateUserOrganizationRoleUseCase
+    private readonly UpdateUserOrganizationRoleUseCase $updateUserOrganizationRoleUseCase,
+    private readonly AuditLogService $auditLogService
   ) {}
 
   public function index(Request $request): JsonResponse
@@ -71,88 +74,165 @@ class UserController
 
   public function destroy(int $id): JsonResponse
   {
-    $deleted = $this->deleteUserUseCase->execute($id);
-    if (!$deleted) {
+    try {
+      $deleted = $this->deleteUserUseCase->execute($id);
+      if (!$deleted) {
+        throw new Exception(ApiMessageEnum::DELETE_FAILED);
+      }
+
+      $this->auditLogService->info('user_deleted', ['user_id' => $id]);
+
+      return $this->successResponse(
+        null,
+        ApiMessageEnum::USER_DELETED_SUCCESSFULLY,
+        ApiStatusCodeEnum::SUCCESS
+      );
+    } catch (Exception $e) {
+      $this->auditLogService->error('user_deletion_failed', [
+        'user_id' => $id,
+        'error' => $e->getMessage()
+      ]);
+
       return $this->errorResponse(
-        ApiMessageEnum::DELETE_FAILED,
+        $e->getMessage(),
         ApiErrorCodeEnum::NOT_FOUND->value,
         ApiStatusCodeEnum::NOT_FOUND
       );
     }
-
-    return $this->successResponse(
-      null,
-      ApiMessageEnum::USER_DELETED_SUCCESSFULLY,
-      ApiStatusCodeEnum::SUCCESS // Changed from NO_CONTENT to SUCCESS to allow body if needed, or keep 204
-    );
   }
 
   public function addToProject(AddUserToProjectRequest $request, int $id): JsonResponse
   {
-    $success = $this->addUserToProjectUseCase->execute($id, $request->project_id, $request->role_id);
-    if (!$success) {
+    try {
+      $success = $this->addUserToProjectUseCase->execute($id, $request->project_id, $request->role_id);
+      if (!$success) {
+        throw new Exception(ApiMessageEnum::USER_NOT_FOUND);
+      }
+
+      $this->auditLogService->info('user_added_to_project', [
+        'target_user_id' => $id,
+        'project_id' => $request->project_id,
+        'role_id' => $request->role_id
+      ]);
+
+      return $this->successResponse(
+        null,
+        ApiMessageEnum::USER_ADDED_TO_PROJECT_SUCCESSFULLY,
+        ApiStatusCodeEnum::CREATED
+      );
+    } catch (Exception $e) {
+      $this->auditLogService->error('add_user_to_project_failed', [
+        'target_user_id' => $id,
+        'project_id' => $request->project_id,
+        'error' => $e->getMessage()
+      ]);
+
       return $this->errorResponse(
-        ApiMessageEnum::USER_NOT_FOUND,
+        $e->getMessage(),
         ApiErrorCodeEnum::NOT_FOUND->value,
         ApiStatusCodeEnum::NOT_FOUND
       );
     }
-    return $this->successResponse(
-      null,
-      ApiMessageEnum::USER_ADDED_TO_PROJECT_SUCCESSFULLY,
-      ApiStatusCodeEnum::CREATED
-    );
   }
 
   public function addToOrganization(AddUserToOrganizationRequest $request, int $id): JsonResponse
   {
-    $success = $this->addUserToOrganizationUseCase->execute($id, $request->organization_id, $request->role_id);
-    if (!$success) {
+    try {
+      $success = $this->addUserToOrganizationUseCase->execute($id, $request->organization_id, $request->role_id);
+      if (!$success) {
+        throw new Exception(ApiMessageEnum::USER_NOT_FOUND);
+      }
+
+      $this->auditLogService->info('user_added_to_organization', [
+        'target_user_id' => $id,
+        'organization_id' => $request->organization_id,
+        'role_id' => $request->role_id
+      ]);
+
+      return $this->successResponse(
+        null,
+        ApiMessageEnum::USER_ADDED_TO_ORGANIZATION_SUCCESSFULLY,
+        ApiStatusCodeEnum::CREATED
+      );
+    } catch (Exception $e) {
+      $this->auditLogService->error('add_user_to_organization_failed', [
+        'target_user_id' => $id,
+        'organization_id' => $request->organization_id,
+        'error' => $e->getMessage()
+      ]);
+
       return $this->errorResponse(
-        ApiMessageEnum::USER_NOT_FOUND,
+        $e->getMessage(),
         ApiErrorCodeEnum::NOT_FOUND->value,
         ApiStatusCodeEnum::NOT_FOUND
       );
     }
-    return $this->successResponse(
-      null,
-      ApiMessageEnum::USER_ADDED_TO_ORGANIZATION_SUCCESSFULLY,
-      ApiStatusCodeEnum::CREATED
-    );
   }
 
   public function removeFromProject(int $id, int $projectId): JsonResponse
   {
-    $success = $this->removeUserFromProjectUseCase->execute($id, $projectId);
-    if (!$success) {
+    try {
+      $success = $this->removeUserFromProjectUseCase->execute($id, $projectId);
+      if (!$success) {
+        throw new Exception(ApiMessageEnum::USER_NOT_FOUND);
+      }
+
+      $this->auditLogService->info('user_removed_from_project', [
+        'target_user_id' => $id,
+        'project_id' => $projectId
+      ]);
+
+      return $this->successResponse(
+        null,
+        ApiMessageEnum::USER_REMOVED_FROM_PROJECT_SUCCESSFULLY,
+        ApiStatusCodeEnum::SUCCESS
+      );
+    } catch (Exception $e) {
+      $this->auditLogService->error('remove_user_from_project_failed', [
+        'target_user_id' => $id,
+        'project_id' => $projectId,
+        'error' => $e->getMessage()
+      ]);
+
       return $this->errorResponse(
-        ApiMessageEnum::USER_NOT_FOUND,
+        $e->getMessage(),
         ApiErrorCodeEnum::NOT_FOUND->value,
         ApiStatusCodeEnum::NOT_FOUND
       );
     }
-    return $this->successResponse(
-      null,
-      ApiMessageEnum::USER_REMOVED_FROM_PROJECT_SUCCESSFULLY,
-      ApiStatusCodeEnum::SUCCESS
-    );
   }
 
   public function removeFromOrganization(int $id, int $organizationId): JsonResponse
   {
-    $success = $this->removeUserFromOrganizationUseCase->execute($id, $organizationId);
-    if (!$success) {
+    try {
+      $success = $this->removeUserFromOrganizationUseCase->execute($id, $organizationId);
+      if (!$success) {
+        throw new Exception(ApiMessageEnum::USER_NOT_FOUND);
+      }
+
+      $this->auditLogService->info('user_removed_from_organization', [
+        'target_user_id' => $id,
+        'organization_id' => $organizationId
+      ]);
+
+      return $this->successResponse(
+        null,
+        ApiMessageEnum::USER_REMOVED_FROM_ORGANIZATION_SUCCESSFULLY,
+        ApiStatusCodeEnum::SUCCESS
+      );
+    } catch (Exception $e) {
+      $this->auditLogService->error('remove_user_from_organization_failed', [
+        'target_user_id' => $id,
+        'organization_id' => $organizationId,
+        'error' => $e->getMessage()
+      ]);
+
       return $this->errorResponse(
-        ApiMessageEnum::USER_NOT_FOUND,
+        $e->getMessage(),
         ApiErrorCodeEnum::NOT_FOUND->value,
         ApiStatusCodeEnum::NOT_FOUND
       );
     }
-    return $this->successResponse(
-      null,
-      ApiMessageEnum::USER_REMOVED_FROM_ORGANIZATION_SUCCESSFULLY,
-      ApiStatusCodeEnum::SUCCESS
-    );
   }
 
   public function updateEmail(UpdateUserEmailRequest $request, int $id): JsonResponse

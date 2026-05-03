@@ -934,6 +934,71 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Auditlogs",
+			"item": [
+				{
+					"name": "List Audit Logs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API}}/audit-logs?user_id=&action=&date_from=&date_to=&search=",
+							"host": [
+								"{{API}}"
+							],
+							"path": [
+								"audit-logs"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "",
+									"description": "Filtrar por ID de usuario"
+								},
+								{
+									"key": "action",
+									"value": "",
+									"description": "Filtrar por acción"
+								},
+								{
+									"key": "date_from",
+									"value": "",
+									"description": "Fecha inicio (YYYY-MM-DD)"
+								},
+								{
+									"key": "date_to",
+									"value": "",
+									"description": "Fecha fin (YYYY-MM-DD)"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Búsqueda general"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"variable": [
